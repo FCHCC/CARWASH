@@ -7,6 +7,9 @@ import {Text,
         TouchableOpacity,
         AsyncStorage,
         Image,
+        Button,
+        TouchableHighlight,
+        Alert,
       } from 'react-native';
 
 
@@ -25,17 +28,21 @@ export default class App extends React.Component {
           this._loadInitialState().done();
   }**/
 
+  _onPressButton() {
+     Alert.alert('You tapped the button!')
+   }
 
   render() {
     return (
         <KeyboardAvoidingView behavior='padding' style={styles.wrapper}>
+
+
             <View style={styles.image}><Image style={{width:200,height:200}} source={require('CARWASH/images/LOGOCARWASH.jpg')} /></View>
               <View style={styles.container}>
 
 
               <TextInput style={styles.textInput} placeholder='Usuario' underlineColorAndroid="transparent"
                         onChangeText={(username) => this.setState({username})}/>
-
 
               <TextInput style={styles.textInput} placeholder='Contraseña' underlineColorAndroid="transparent"
                           onChangeText={(password)=>this.setState({password})}/>
@@ -44,8 +51,26 @@ export default class App extends React.Component {
 
             <View style={styles.textContainer }><Text style={styles.text}>¿Olvidaste tu Contraseña?</Text></View>
 
-            <View>
-              
+
+            <View style={styles.containerButton}>
+
+              <TouchableHighlight onPress={this._onPressButton}>
+                <View style={styles.buttonLogin}>
+                  <Text style={styles.buttonText}>INICIAR SESION</Text>
+                </View>
+              </TouchableHighlight>
+
+              <TouchableHighlight>
+                <View style={styles.buttonFacebook}>
+                  <Text style={styles.buttonText}>REGISTRARSE CON FACEBOOK</Text>
+                </View>
+              </TouchableHighlight>
+
+              <TouchableHighlight>
+                <View style={styles.buttonGoogle}>
+                  <Text style={styles.buttonText}>REGISTRARSE CON GOOGLE</Text>
+                </View>
+              </TouchableHighlight>
             </View>
         </KeyboardAvoidingView>
     );
@@ -82,7 +107,28 @@ const styles= StyleSheet.create({
       alignItems:'center',
       paddingTop:20,
   },
-  buttons:{},
+  buttonText:{
+    padding:20,
+    color:'white',
+    textAlign:'center',
+    fontSize:15,
+    fontWeight:'bold',
+  },
+  buttonLogin:{
+    backgroundColor:'#343a8b',
+    borderRadius:10,
+
+  },
+  buttonFacebook:{
+    backgroundColor:'#3b5998',
+    borderRadius:10,
+    marginTop:10,
+  },
+  buttonGoogle:{
+    backgroundColor:'#e84f4b',
+    borderRadius:10,
+    marginTop:10,
+  },
   text:{
 
     textAlign:'right',
@@ -92,5 +138,14 @@ const styles= StyleSheet.create({
   textContainer:{
 
     paddingRight:50,
+  },
+  containerButton:{
+  justifyContent:'center',
+  marginLeft:55,
+  margin:20,
+  width:300,
+  height:170,
+
+
   },
 })
