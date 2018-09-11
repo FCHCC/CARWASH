@@ -11,7 +11,7 @@ import {Text,
         TouchableHighlight,
         Alert,
       } from 'react-native';
-
+import {createStackNavigator} from 'react-navigation';
 
 
 export default class App extends React.Component {
@@ -28,9 +28,6 @@ export default class App extends React.Component {
           this._loadInitialState().done();
   }**/
 
-  _onPressButton() {
-     Alert.alert('You tapped the button!')
-   }
 
   render() {
     return (
@@ -54,7 +51,7 @@ export default class App extends React.Component {
 
             <View style={styles.containerButton}>
 
-              <TouchableHighlight onPress={this._onPressButton}>
+              <TouchableHighlight onPress={()=> this.props.navigation.navigate('mainPage')}>
                 <View style={styles.buttonLogin}>
                   <Text style={styles.buttonText}>INICIAR SESION</Text>
                 </View>

@@ -2,14 +2,22 @@
 
 import React, {Component} from 'react';
 import {Text, View,StyleSheet} from 'react-native';
-import {StackNavigator} from 'react-navigation';
-import login from './components/login';
+import {createStackNavigator,} from 'react-navigation';
+import login from 'CARWASH/components/login';
+import mainPage from 'CARWASH/components/mainPage';
 
-const Application = StackNavigator({
-  Home: {screen :login },
+const Application = createStackNavigator({
+  Home: {screen :login ,navigationOptions:{
+    header: null,
+  }},
+  mainPage:{ screen:mainPage,navigationOptions:{
+    header: null,
+
+  }},
 },{
     navigationOptions:{
         header:false,
+
     }
 
 });
