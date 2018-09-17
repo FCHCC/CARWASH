@@ -3,15 +3,9 @@ import {Text, View,StyleSheet} from 'react-native';
 import {StackNavigator} from 'react-navigation';
 
 
-export default class mainPage extends React.Component {
+ class mainPage extends Component {
 
-  static navigationOptions ={
-    drawerLabel:'Home',
-    drawerIcon:({tintColor}) =>(
-      <Image source={require('CARWASH/images/menuicon.png')
-              style={[styles.icon, {tintColor: tintColor}]}}/>
-    )
-  }
+
 
   render() {
     return (
@@ -32,3 +26,5 @@ const styles = StyleSheet.create({
     height:24,
   },
 })
+
+export default mainPage;

@@ -14,7 +14,7 @@ import {Text,
 import {createStackNavigator} from 'react-navigation';
 
 
-export default class App extends React.Component {
+class login extends Component {
 
   constructor(props){
     super(props);
@@ -74,6 +74,7 @@ export default class App extends React.Component {
   }
 }
 
+export default login;
 
 const styles= StyleSheet.create({
   wrapper:{
