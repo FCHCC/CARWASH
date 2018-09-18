@@ -1,6 +1,6 @@
 import React , {Component} from 'react';
 import {navigationActions} from 'react-navigation';
-import {ScrollView,Text, View, StyleSheet,Image} from 'react-native';
+import {ScrollView,Text, View, StyleSheet,Image,TouchableHighlight} from 'react-native';
 
 class sideMenu extends Component{
 
@@ -11,23 +11,52 @@ class sideMenu extends Component{
       <View style={styles.container}>
         <View style={styles.containerProfile}>
           <View >
-            <Text>NOMBRE DE USUARIO</Text>
-            <Text>LAVADAS</Text>
+            <Text style={styles.textProfile}>NOMBRE DE USUARIO</Text>
+            <Text style={styles.textProfile}>LAVADAS</Text>
           </View>
-          <View >
-            <Image source={require("./images/profile.png")}/>
+          <View style={styles.containerImageProfile} >
+            <Image style={{width:100,height:100}} source={require("../images/profile.png")}/>
           </View>
         </View>
 
         <ScrollView>
-          <View>
-            <Text>HISTORIAL</Text>
+
+          <View >
+            <TouchableHighlight style={styles.containerMenu} underlayColor="#2c67b2"
+                onPress={()=> this.props.navigation.navigate('mainPage')}>
+                  <Text style={styles.textMenu}>HOME</Text>
+                </TouchableHighlight>
           </View>
-          <View>
-            <Text>COMENTARIOS</Text>
+
+          <View >
+            <TouchableHighlight style={styles.containerMenu} underlayColor="#2c67b2"
+                onPress={()=> this.props.navigation.navigate('historyScreen')}>
+                <View style={{flexDirection:'row'}}>
+                    <Text style={styles.textMenu}>HISTORIAL</Text>
+                    <Image style={styles.imageMenu} source={require("../images/history.png")}/>
+                </View>
+                </TouchableHighlight>
           </View>
+
           <View>
-            <Text>CERRAR SESION</Text>
+            <TouchableHighlight style={styles.containerMenu} underlayColor="#2c67b2"
+                onPress={()=> this.props.navigation.navigate('commentsScreen')}>
+                <View style={{flexDirection:'row'}}>
+                    <Text style={styles.textMenu}>COMENTARIOS</Text>
+                      <Image  style={styles.imageMenu} source={require("../images/chat.png")}/>
+                </View>
+                </TouchableHighlight>
+
+          </View>
+
+          <View>
+            <TouchableHighlight style={styles.containerMenu} underlayColor="#2c67b2"
+                onPress={()=> this.props.navigation.navigate('Home')}>
+                <View style={{flexDirection:'row'}}>
+                    <Text style={styles.textMenu}>CERRAR SESION</Text>
+                      <Image style={styles.imageMenu} source={require("../images/logout.png")}/>
+                </View>
+                </TouchableHighlight>
           </View>
         </ScrollView>
       </View>
@@ -41,9 +70,44 @@ const styles= StyleSheet.create({
   },
   containerProfile:{
     height:200,
-    backgroundColor:'yellow',
-    justifyContent:'center',
     flexDirection:'row',
+  },
+  containerMenu:{
+
+    flexDirection:'row',
+    height:80,
+    paddingTop:20,
+    borderWidth:2,
+    borderColor:'#2c67b2',
+    marginTop:10,
+
+  },
+  textProfile:{
+    fontSize:15,
+    paddingTop:40,
+    paddingLeft:5,
+    fontWeight:'bold',
+    textDecorationColor:'black',
+  },
+  textMenu:{
+
+    fontSize:20,
+    fontWeight:'bold',
+    textDecorationColor:'black',
+    paddingRight:30,
+    paddingLeft:20,
+    alignItems:'center',
+    paddingTop:5,
+  },
+
+  imageMenu:{
+    marginTop:5
+  },
+  containerImageProfile:{
+    flexDirection:'row',
+    width:100,
+    justifyContent:'center',
+    paddingTop:20,
   }
 })
 export default sideMenu;

@@ -12,7 +12,7 @@ import {StackNavigator} from 'react-navigation';
       <View >
 
 
-      <Text>HOLA</Text>
+      <Text>HOLA MAIN PAGE</Text>
               </View>
 
     );

@@ -29,10 +29,7 @@ const Application = StackNavigator({
       headerLeft:<View style={{paddingLeft:20}}>
         <TouchableHighlight
             onPress={()=>{
-              if(navigation.state.index==0){
-                navigation.openDrawer()}else{
-                  navigation.closeDrawer();
-                }
+              navigation.openDrawer();
             }}>
               <Image source={require("./images/menuicon.png")}/>
             </TouchableHighlight>
