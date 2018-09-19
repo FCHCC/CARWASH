@@ -12,11 +12,11 @@ import ServiceMenu from '../components/serviceMenu.js';
     return (
       <View style={{flex:1, backgroundColor:'white'}} >
 
-        <View style={{height:250}} >
-        <ScrollView horizontal pagingEnabled>
-          <View style={{width:450,height:250}}>
+        <View style={{height:200}} >
+        <ScrollView horizontal pagingEnabled >
+          <View style={{width:420,height:200, backgroundColor:'white'}}>
 
-          <Image source={require("../images/promocion2.png")}/>
+          <Image style={{flex:1,height: undefined,width:undefined}} resizeMode="contain" source={require("../images/promocion1.png")} />
 
           </View>
         </ScrollView>
