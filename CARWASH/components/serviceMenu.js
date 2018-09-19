@@ -6,9 +6,12 @@ class ServiceMenu extends Component{
     return(
       <View>
         <TouchableHighlight style={styles.button} underlayColor="white">
-          <View>
+          <View style={{flexDirection:'row'}}>
+              <Image style={styles.imageMenu} source={this.props.urlImage}/>
             <Text style={styles.buttonText}>{this.props.serviceName}</Text>
-            <Image style={styles.imageMenu} uri={this.props.urlImage}/>
+
+
+
           </View>
         </TouchableHighlight>
       </View>
@@ -20,16 +23,27 @@ const styles = StyleSheet.create({
   button:{
     backgroundColor:'#343a8b',
     flexDirection:'row',
+    height:80,
+    borderWidth:2,
+    borderColor:'#2c67b2',
+    justifyContent:'space-between',
+    padding:10,
+    marginTop:10,
+
   },
   buttonText:{
-    padding:20,
+
     color:'white',
-    textAlign:'center',
-    fontSize:15,
+    fontSize:25,
     fontWeight:'bold',
+    paddingTop:10,
+    paddingLeft:30,
+
   },
   imageMenu:{
-    marginTop:5
+    width:60,
+    height:60,
+    paddingLeft:30,
   }
 })
 

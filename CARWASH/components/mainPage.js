@@ -10,39 +10,49 @@ import ServiceMenu from '../components/serviceMenu.js';
 
   render() {
     return (
-      <View >
+      <View style={{flex:1, backgroundColor:'white'}} >
 
-        <View >
-          <Text>CARROUSEL DE IMAGENES</Text>
+        <View style={{height:250}} >
+        <ScrollView horizontal pagingEnabled>
+          <View style={{width:450,height:250}}>
+
+          <Image source={require("../images/promocion2.png")}/>
+
+          </View>
+        </ScrollView>
         </View>
 
         <View>
-          <Text>TITULO SERVICIOS</Text>
+          <Text style={styles.textTitle}>HAZ CLIC EN EL SERVICIO DESEADO</Text>
       </View>
 
         <ScrollView>
 
-          <View>
-            <TouchableHighlight style={styles.button} underlayColor="white">
-              <View style={{flexDirection:'row'}}>
-                <Text style={styles.buttonText}>LAVADO</Text>
-                <Image style={styles.imageMenu} source={require("../images/washingcar.png")}/>
-              </View>
-            </TouchableHighlight>
-          </View>
+            <ServiceMenu urlImage={require("../images/washingcar.png")} serviceName='LAVADO'/>
 
-          <View>
-            <TouchableHighlight style={styles.button} underlayColor="white">
-              <View style={{flexDirection:'row'}}>
-                <Text style={styles.buttonText}>ASPIRADO</Text>
-                <Image style={styles.imageMenu} source={require("../images/washingcar.png")}/>
-              </View>
-            </TouchableHighlight>
-          </View>
+            <ServiceMenu serviceName='ASPIRADO' urlImage={require("../images/vacuum-cleaner.png")}/>
 
+            <ServiceMenu serviceName='BAÑO DE CERA' urlImage={require("../images/carclean.png")}/>
 
+            <ServiceMenu serviceName='LAVADO DE MOTOR' urlImage={require("../images/engine.png")}/>
 
+            <ServiceMenu serviceName='PULIDO' urlImage={require("../images/car1.png")}/>
 
+            <ServiceMenu serviceName='HIDRATACION DE INTERIORES' urlImage={require("../images/seat.png")}/>
+
+            <ServiceMenu serviceName='LAVADO SALPICADERAS' urlImage={require("../images/carfront.png")}/>
+
+            <ServiceMenu serviceName='DESCONTAMINADO' urlImage={require("../images/car2.png")}/>
+
+            <ServiceMenu serviceName='ENCERADO' urlImage={require("../images/wax.png")}/>
+
+            <ServiceMenu serviceName='LAVADO VESTIDURAS Y CIELO' urlImage={require("../images/caropen.png")}/>
+
+            <ServiceMenu serviceName='PULIR FAROS' urlImage={require("../images/high-beam.png")}/>
+
+            <ServiceMenu serviceName='PULIR RINES' urlImage={require("../images/cartire.png")}/>
+
+            <ServiceMenu serviceName='DESMANCHADO POR ZONA' urlImage={require("../images/stained.png")}/>
         </ScrollView>
 
       </View>
@@ -52,32 +62,14 @@ import ServiceMenu from '../components/serviceMenu.js';
 
 }
 
-
 const styles = StyleSheet.create({
-  button:{
-    backgroundColor:'#343a8b',
-    flexDirection:'row',
-    height:80,
-    borderWidth:2,
-    borderColor:'#2c67b2',
-    justifyContent:'center',
-    padding:10,
-    marginTop:10,
 
-  },
-  buttonText:{
-
-    color:'white',
-    fontSize:25,
+  textTitle:{
+    fontSize:22,
+    color:'black',
     fontWeight:'bold',
-    paddingTop:10,
-    paddingRight:10,
-
-  },
-  imageMenu:{
-    width:60,
-    height:60,
-
+    textAlign:'center',
+    color:'#343a8b',
   }
 })
 
