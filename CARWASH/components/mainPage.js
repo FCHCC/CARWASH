@@ -1,9 +1,9 @@
 import React, {Component} from 'react';
 import {Text, View,StyleSheet,TouchableHighlight,ScrollView,Image,FlatList} from 'react-native';
 import {StackNavigator} from 'react-navigation';
-import ServiceMenu from '../components/serviceMenu.js';
 import Swiper from 'react-native-swiper';
-
+import {navigationActions} from 'react-navigation';
+import servicios from '../components/services.js';
  class mainPage extends Component {
 
 
@@ -12,40 +12,32 @@ import Swiper from 'react-native-swiper';
     return (
       <View style={{flex:1, backgroundColor:'white'}} >
 
+        {/*ANUNCIOS*/}
         <View style={{height:200}} >
-
           <Swiper horizontal={true} autoplay>
             {promos.map((item,key)=>
-
                 <View key={key} style={{width:420,height:200, backgroundColor:'white'}}>
                 <Image style={{flex:1,height: undefined,width:undefined}} resizeMode="contain" source={item.urlImage} />
                     </View>
               )}
           </Swiper>
-        {/*<FlatList horizontal={true}
-          data={promos}
-          renderItem={({item})=>
-          <View style={{width:420,height:200, backgroundColor:'white'}}>
-
-          <Image style={{flex:1,height: undefined,width:undefined}} resizeMode="contain" source={item.urlImage} />
-
-          </View>
-
-        }
-        keyExtractor={(item, index) => index.toString()}
-      />*/}
         </View>
 
+        {/*LEYENDA*/}
         <View>
           <Text style={styles.textTitle}>HAZ CLIC EN EL SERVICIO DESEADO</Text>
       </View>
 
-
+        {/*BOTONES DE SERVICIOS*/}
       <FlatList
             data={servicios}
             renderItem={({item,index})=>
             <View>
-              <TouchableHighlight index={index} style={styles.button} underlayColor="white">
+              <TouchableHighlight
+                index={index}
+                style={styles.button}
+                underlayColor="white"
+                onPress={()=> this.props.navigation.navigate('ServicePage')}>
                 <View style={{flexDirection:'row'}}>
                     <Image style={styles.imageMenu} source={item.urlImage}/>
                   <Text style={styles.buttonText}>{item.service}</Text>
@@ -55,37 +47,6 @@ import Swiper from 'react-native-swiper';
           }
           keyExtractor={(item, index) => index.toString()}
         />
-
-
-      {/*  <ScrollView>
-
-            <ServiceMenu urlImage={require("../images/washingcar.png")} serviceName='LAVADO'/>
-
-            <ServiceMenu serviceName='ASPIRADO' urlImage={require("../images/vacuum-cleaner.png")}/>
-
-            <ServiceMenu serviceName='BAÑO DE CERA' urlImage={require("../images/carclean.png")}/>
-
-            <ServiceMenu serviceName='LAVADO DE MOTOR' urlImage={require("../images/engine.png")}/>
-
-            <ServiceMenu serviceName='PULIDO' urlImage={require("../images/car1.png")}/>
-
-            <ServiceMenu serviceName='HIDRATACION DE INTERIORES' urlImage={require("../images/seat.png")}/>
-
-            <ServiceMenu serviceName='LAVADO SALPICADERAS' urlImage={require("../images/carfront.png")}/>
-
-            <ServiceMenu serviceName='DESCONTAMINADO' urlImage={require("../images/car2.png")}/>
-
-            <ServiceMenu serviceName='ENCERADO' urlImage={require("../images/wax.png")}/>
-
-            <ServiceMenu serviceName='LAVADO VESTIDURAS Y CIELO' urlImage={require("../images/caropen.png")}/>
-
-            <ServiceMenu serviceName='PULIR FAROS' urlImage={require("../images/high-beam.png")}/>
-
-            <ServiceMenu serviceName='PULIR RINES' urlImage={require("../images/cartire.png")}/>
-
-            <ServiceMenu serviceName='DESMANCHADO POR ZONA' urlImage={require("../images/stained.png")}/>
-        </ScrollView>
-*/}
       </View>
 
     );
@@ -104,60 +65,7 @@ var promos=[
     urlImage:require("../images/LOGOCARWASH.jpg")
   }
 ]
-var servicios=[
-  {
-    service:'LAVADO',
-    urlImage: require("../images/washingcar.png")
-  },
-  {
-    service:'ASPIRADO',
-    urlImage: require("../images/vacuum-cleaner.png")
-  },
-  {
-    service:'BAÑO DE CERA',
-    urlImage:require("../images/carclean.png"),
-  },
-  {
-    service:'LAVADO DE MOTOR',
-    urlImage:require("../images/engine.png"),
-  },
-  {
-    service:'PULIDO',
-    urlImage:require("../images/car1.png"),
-  },
-  {
-    service:'HIDRATACION DE INTERIORES',
-    urlImage:require("../images/seat.png"),
-  },
-  {
-    service:'LAVADO SALPICADERAS',
-    urlImage:require("../images/carfront.png"),
-  },
-  {
-    service:'DESCONTAMINADO',
-    urlImage:require("../images/car2.png"),
-  },
-  {
-    service:'ENCERADO',
-    urlImage:require("../images/wax.png"),
-  },
-  {
-    service:'LAVADO VESTIDURAS Y CIELO',
-    urlImage: require("../images/wax.png"),
-  },
-  {
-    service:'PULIR FAROS',
-    urlImage:require("../images/high-beam.png"),
-  },
-  {
-    service:'PULIR RINES',
-    urlImage:require("../images/cartire.png"),
-  },
-  {
-    service:'DESMANCHADO POR ZONA',
-    urlImage:require("../images/stained.png"),
-  }
-  ];
+
 
 const styles = StyleSheet.create({
 
