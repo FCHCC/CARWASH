@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import {Text, View,StyleSheet,TouchableHighlight,ScrollView,Image,FlatList} from 'react-native';
 import {StackNavigator} from 'react-navigation';
 import ServiceMenu from '../components/serviceMenu.js';
-
+import Swiper from 'react-native-swiper';
 
  class mainPage extends Component {
 
@@ -13,7 +13,16 @@ import ServiceMenu from '../components/serviceMenu.js';
       <View style={{flex:1, backgroundColor:'white'}} >
 
         <View style={{height:200}} >
-        <FlatList horizontal={true}
+
+          <Swiper horizontal={true} autoplay>
+            {promos.map((item,key)=>
+
+                <View key={key} style={{width:420,height:200, backgroundColor:'white'}}>
+                <Image style={{flex:1,height: undefined,width:undefined}} resizeMode="contain" source={item.urlImage} />
+                    </View>
+              )}
+          </Swiper>
+        {/*<FlatList horizontal={true}
           data={promos}
           renderItem={({item})=>
           <View style={{width:420,height:200, backgroundColor:'white'}}>
@@ -24,7 +33,7 @@ import ServiceMenu from '../components/serviceMenu.js';
 
         }
         keyExtractor={(item, index) => index.toString()}
-      />
+      />*/}
         </View>
 
         <View>
