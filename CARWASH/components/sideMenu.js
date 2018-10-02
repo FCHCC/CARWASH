@@ -87,13 +87,13 @@ const styles= StyleSheet.create({
     paddingTop:40,
     paddingLeft:5,
     fontWeight:'bold',
-    color:'black',
+    textDecorationColor:'black',
   },
   textMenu:{
 
     fontSize:20,
     fontWeight:'bold',
-    color:'black',
+    textDecorationColor:'black',
     paddingRight:30,
     paddingLeft:20,
     alignItems:'center',

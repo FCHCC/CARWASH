@@ -4,9 +4,46 @@ import {StackNavigator} from 'react-navigation';
 import Swiper from 'react-native-swiper';
 import {navigationActions} from 'react-navigation';
 import servicios from '../components/services.js';
+import Icon from 'react-native-vector-icons/Ionicons';
+
  class mainPage extends Component {
 
+   constructor(props) {
+    super(props)
+      this.state={
+          services:servicios,
+          selectServiceList:[],
+      }
+  }
 
+  press = (data) => {
+      this.state.services.map((item)=>{
+        if(item.service === data.service){
+          item.check = !item.check
+          if(item.check === true){
+            this.state.selectServiceList.push(item);
+            console.log('select'+item.service);
+          }else if(item.check === false){
+            const i = this.state.selectServiceList.indexOf(item)
+            if(1 != -1){
+                this.state.selectServiceList.splice(i,1);
+                console.log('unselect:'+item.service)
+                return this.state.selectServiceList
+            }
+          }
+        }
+      })
+
+      this.setState(
+        {
+          services: this.state.services
+        }
+      )
+  }
+
+  _showSelectedContact() {
+   return this.state.selectServiceList.length;
+ }
 
   render() {
     return (
@@ -29,26 +66,45 @@ import servicios from '../components/services.js';
       </View>
 
         {/*BOTONES DE SERVICIOS*/}
+
+
+
       <FlatList
-            data={servicios}
+            data={this.state.services}
+            keyExtractor={item => item.service}
+            extraData={this.state}
+
             renderItem={({item,index})=>
-            <View>
-              <TouchableHighlight
+              {return <TouchableHighlight
                 index={index}
                 style={styles.button}
                 underlayColor="white"
-                onPress={()=> this.props.navigation.navigate('ServicePage')}>
+                onPress={()=> {this.press(item)}}>
                 <View style={{flexDirection:'row'}}>
                     <Image style={styles.imageMenu} source={item.urlImage}/>
                   <Text style={styles.buttonText}>{item.service}</Text>
+                  <View style={{marginLeft:10, flexDirection:'row'}}>
+                {item.check ? (
+                  <Icon name='ios-checkmark-circle' size={50} color='white'></Icon>)
+                    : null}
                 </View>
-              </TouchableHighlight>
-            </View>
+              </View>
+            </TouchableHighlight>}
           }
-          keyExtractor={(item, index) => index.toString()}
-        />
-      </View>
 
+        />
+
+          {(this.state.selectServiceList.length>0) ? (
+            <TouchableHighlight style={styles.buttonNext}>
+              <View style={{flexDirection:'row'}}>
+            <Text style={styles.buttonTextNext}>SIGUIENTE</Text>
+              <View style={{marginLeft:10, flexDirection:'row'}}>
+                <Icon name='ios-arrow-forward' size={50} color='#343a8b'></Icon>
+              </View>
+            </View>
+          </TouchableHighlight>):null}
+
+      </View>
     );
   }
 
@@ -88,13 +144,32 @@ const styles = StyleSheet.create({
     marginTop:10,
 
   },
+  buttonNext:{
+    backgroundColor:'#E6E6FA',
+    flexDirection:'row',
+    height:80,
+    borderWidth:2,
+    borderColor:'#2c67b2',
+    justifyContent:'space-between',
+    padding:10,
+    marginTop:10,
+  },
   buttonText:{
 
     color:'white',
     fontSize:20,
     fontWeight:'bold',
     paddingTop:10,
-    paddingLeft:30,
+    paddingLeft:20,
+
+  },
+  buttonTextNext:{
+
+    color:'#343a8b',
+    fontSize:20,
+    fontWeight:'bold',
+    paddingTop:10,
+    paddingLeft:20,
 
   },
   imageMenu:{

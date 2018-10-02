@@ -5,9 +5,9 @@ import {StackNavigator} from 'react-navigation';
 class historyScreen extends Component{
   render(){
     return(
-<Text>HOLA HISTORY SCREEN</Text>
-    )
-  }
+      <View><Text>HOLA</Text></View>
+)
+}
 }
 
 export default historyScreen;
