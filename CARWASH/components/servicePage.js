@@ -7,26 +7,41 @@ import servicios from '../components/services.js';
 
 class ServicePage extends Component{
 
+    constructor(props){
+      super(props)
+        this.state = {
+          selectServiceList: this.props.navigation.state.params.selectServiceList
+        }
+    }
 
 
   render(){
     return(
       <View>
-          <View>
-            <Text>LAVADO</Text>
-          </View>
 
           <View>
-            <Text>DESCRIPCION DEL PRODUCTO</Text>
-            <Text>$$$</Text>
+          <Text style={{fontSize:25,
+            fontWeight:'bold',
+            color:'#343a8b', textAlign:'center'}} >SERVICIOS SELECCIONADOS</Text>
           </View>
 
+          <View style={styles.button}>
+          {this.state.selectServiceList.map((service,id)=>{
+            return (
+
+                <View key={id} style={{width:150}}>
+              <Text style={styles.textService}>{service.service}</Text>
+
+            </View>
+            )
+          })}
+          </View>
+
+
           <View>
-            <Picker>
-              {servicios.map((item,index)=>(
-                <Picker.Item key={index} label={item.service} value={item.service}/>
-              ))}
-            </Picker>
+
+              Tipo de Carro:
+              FECHA: 
           </View>
 
       </View>
@@ -35,5 +50,22 @@ class ServicePage extends Component{
   }
 }
 
+
+
+const styles = StyleSheet.create({
+
+    textService:{
+      fontSize:22,
+      fontWeight:'bold',
+      color:'#343a8b',
+    },
+    button:{
+      display:'flex',
+      flexDirection:'row',
+      borderColor:'#2c67b2',
+
+    }
+
+})
 
 export default ServicePage;

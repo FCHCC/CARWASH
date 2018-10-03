@@ -24,7 +24,7 @@ import Icon from 'react-native-vector-icons/Ionicons';
             this.state.selectServiceList.push(item);
             console.log('select'+item.service);
           }else if(item.check === false){
-            const i = this.state.selectServiceList.indexOf(item)
+            const i = this.state.selectServiceList.indexOf(item.service,item.price)
             if(1 != -1){
                 this.state.selectServiceList.splice(i,1);
                 console.log('unselect:'+item.service)
@@ -95,13 +95,15 @@ import Icon from 'react-native-vector-icons/Ionicons';
         />
 
           {(this.state.selectServiceList.length>0) ? (
-            <TouchableHighlight style={styles.buttonNext}>
-              <View style={{flexDirection:'row'}}>
-            <Text style={styles.buttonTextNext}>SIGUIENTE</Text>
-              <View style={{marginLeft:10, flexDirection:'row'}}>
-                <Icon name='ios-arrow-forward' size={50} color='#343a8b'></Icon>
+            <TouchableHighlight
+              style={styles.buttonNext}
+              onPress={()=> this.props.navigation.navigate('ServicePage',{selectServiceList:this.state.selectServiceList})}>
+              <View style={{flexDirection:'row', paddingLeft:180}}>
+                <Text style={styles.buttonTextNext}>SIGUIENTE</Text>
+                <View style={{marginLeft:20, flexDirection:'row'}}>
+                  <Icon name='ios-arrow-forward' size={40} color='#343a8b'></Icon>
+                </View>
               </View>
-            </View>
           </TouchableHighlight>):null}
 
       </View>
@@ -147,20 +149,19 @@ const styles = StyleSheet.create({
   buttonNext:{
     backgroundColor:'#E6E6FA',
     flexDirection:'row',
-    height:80,
+    height:60,
     borderWidth:2,
     borderColor:'#2c67b2',
     justifyContent:'space-between',
     padding:10,
-    marginTop:10,
   },
   buttonText:{
 
     color:'white',
     fontSize:20,
     fontWeight:'bold',
+    paddingLeft:30,
     paddingTop:10,
-    paddingLeft:20,
 
   },
   buttonTextNext:{
@@ -168,7 +169,7 @@ const styles = StyleSheet.create({
     color:'#343a8b',
     fontSize:20,
     fontWeight:'bold',
-    paddingTop:10,
+    paddingTop:5,
     paddingLeft:20,
 
   },
