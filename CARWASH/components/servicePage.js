@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Text, View,StyleSheet,TouchableHighlight,ScrollView,Image,FlatList,Picker} from 'react-native';
+import {Text, View,StyleSheet,TouchableHighlight,ScrollView,Image,FlatList,Picker,Platform} from 'react-native';
 import {StackNavigator} from 'react-navigation';
 import Swiper from 'react-native-swiper';
 import {navigationActions} from 'react-navigation';
@@ -20,33 +20,37 @@ class ServicePage extends Component{
       <View>
 
           <View>
-          <Text style={{fontSize:25,
-            fontWeight:'bold',
-            color:'#343a8b', textAlign:'center'}} >SERVICIOS SELECCIONADOS</Text>
+            <Text style={{fontSize:25,
+                fontWeight:'bold',
+                color:'#343a8b', textAlign:'center'}} >SERVICIOS QUE ELEGISTE: </Text>
           </View>
 
           <View style={styles.button}>
-          {this.state.selectServiceList.map((service,id)=>{
-            return (
+            {this.state.selectServiceList.map((service,id)=>{
+                return (
 
-                <View key={id} style={{width:150}}>
-              <Text style={styles.textService}>{service.service}</Text>
+                  <View key={id} style={{width:150}}>
+                      <Text style={styles.textService}>{service.service}</Text>
 
-            </View>
-            )
-          })}
-          </View>
+                  </View>
+                )
+              })}
+
+           </View>
 
 
-          <View>
+           <View>
 
-              Tipo de Carro:
-              FECHA: 
-          </View>
+
+          
+
+           </View>
 
       </View>
 
     )
+
+
   }
 }
 

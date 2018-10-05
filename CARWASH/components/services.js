@@ -4,7 +4,7 @@ var servicios=[
     urlImage: require("../images/washingcar.png"),
     description:'Incluye Lavado y  Aspirado',
     price:[
-      {auto:'camioneta',target:'90'},
+      {car:'camioneta',target:'90'},
       {auto:'SEDAN',target:'50'}
   ]
   },
