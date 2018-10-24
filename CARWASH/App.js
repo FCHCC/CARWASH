@@ -3,10 +3,10 @@
 import React, {Component} from 'react';
 import {Text, View,StyleSheet,TouchableHighlight,Image,Alert} from 'react-native';
 import {StackNavigator} from 'react-navigation';
-import login from 'CARWASH/components/login';
-import drawerScreen from 'CARWASH/components/drawerScreen';
+import { isSignedIn } from "./auth.js";
+import { createRootNavigator } from "./routes.js";
 
-const Application = StackNavigator({
+{/*const Application = StackNavigator({
   Home: {screen :login ,navigationOptions:{
     header: null,
   }},
@@ -36,12 +36,32 @@ const Application = StackNavigator({
       </View>
     })
   }
-);
+);*/}
 
 export default class App extends Component<Props> {
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      signedIn: false,
+      checkedSignIn: false
+    };
+  }
+
+  componentDidMount() {
+   isSignedIn()
+     .then(res => this.setState({ signedIn: res, checkedSignIn: true }))
+     .catch(err => alert("An error occurred"));
+ }
+
   render() {
-    return (
-      <Application />
-    );
+      const { checkedSignIn, signedIn } = this.state;
+
+      if (!checkedSignIn) {
+       return null;
+     }
+
+     const Layout = createRootNavigator(signedIn);
+     return <Layout />;
   }
 }

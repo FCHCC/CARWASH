@@ -12,25 +12,10 @@ import {Text,
         Alert,
       } from 'react-native';
 import {createStackNavigator} from 'react-navigation';
+import { onSignIn } from "../auth";
 
 
-class login extends Component {
-
-  constructor(props){
-    super(props);
-    this.state= {
-        username:'',
-        password:'',
-    };
-  }
-
-/**  componentDidMount(){
-          this._loadInitialState().done();
-  }**/
-
-
-  render() {
-    return (
+export default ({navigation}) =>(
         <KeyboardAvoidingView behavior='padding' style={styles.wrapper}>
 
 
@@ -51,9 +36,15 @@ class login extends Component {
 
             <View style={styles.containerButton}>
 
-              <TouchableHighlight onPress={()=> this.props.navigation.navigate('mainPage')}>
+              <TouchableHighlight onPress={() => {onSignIn().then(() => navigation.navigate("SignedIn"));}}>
                 <View style={styles.buttonLogin}>
-                  <Text style={styles.buttonText}>INICIAR SESION</Text>
+                  <Text style={styles.buttonText}>SIGN UP</Text>
+                </View>
+              </TouchableHighlight>
+
+              <TouchableHighlight onPress={() => navigation.navigate("SignIn")}>
+                <View style={styles.buttonLogin}>
+                  <Text style={styles.buttonText}>SIGN IN</Text>
                 </View>
               </TouchableHighlight>
 
@@ -68,13 +59,14 @@ class login extends Component {
                   <Text style={styles.buttonText}>REGISTRARSE CON GOOGLE</Text>
                 </View>
               </TouchableHighlight>
+
+
             </View>
         </KeyboardAvoidingView>
     );
-  }
-}
 
-export default login;
+
+
 
 const styles= StyleSheet.create({
   wrapper:{

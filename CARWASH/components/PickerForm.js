@@ -10,7 +10,7 @@ class PickerForm extends Component{
     constructor(props){
       super(props)
         this.state = {
-          selectServiceList: this.props.navigation.state.params.selectServiceList
+
         }
     }
 
@@ -21,7 +21,6 @@ class PickerForm extends Component{
   service.price.map(price,key)=>{
     <Picker
       selectedValue={price.car}
-      onValueChange={}
       >
 
     </Picker>
@@ -32,6 +31,6 @@ class PickerForm extends Component{
 }
 
 const styles = StyleSheet.create({
-  
+
 })
 export default PickerForm;

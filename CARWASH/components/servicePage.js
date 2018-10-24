@@ -4,16 +4,24 @@ import {StackNavigator} from 'react-navigation';
 import Swiper from 'react-native-swiper';
 import {navigationActions} from 'react-navigation';
 import servicios from '../components/services.js';
+import ModalSelector from 'react-native-modal-selector';
 
 class ServicePage extends Component{
 
     constructor(props){
       super(props)
         this.state = {
-          selectServiceList: this.props.navigation.state.params.selectServiceList
+          selectServiceList: this.props.navigation.state.params.selectServiceList,
+          carsSelected:[],
         }
     }
 
+
+press=(data)=>{
+    if(data >= 1){
+      this.state.carsSelected.push(data);
+    }
+}
 
   render(){
     return(
@@ -31,10 +39,22 @@ class ServicePage extends Component{
 
                   <View key={id} style={{width:150}}>
                       <Text style={styles.textService}>{service.service}</Text>
-
                   </View>
                 )
               })}
+
+          {/*this.state.selectServiceList.map((service,id)=>{
+            service.price.map((price,key)=>{
+              return(
+                  <ModalSelector
+                    data={price.car}
+                    onChange={()=> this.press(item)}
+                    >
+
+                  </ModalSelector>
+              )
+            })
+          })*/}
 
            </View>
 
@@ -42,7 +62,7 @@ class ServicePage extends Component{
            <View>
 
 
-          
+
 
            </View>
 

@@ -4,8 +4,6 @@ import {ScrollView,Text, View, StyleSheet,Image,TouchableHighlight} from 'react-
 
 class sideMenu extends Component{
 
-
-
   render(){
     return(
       <View style={styles.container}>
@@ -51,7 +49,7 @@ class sideMenu extends Component{
 
           <View>
             <TouchableHighlight style={styles.containerMenu} underlayColor="#2c67b2"
-                onPress={()=> this.props.navigation.navigate('Home')}>
+                onPress={()=> this.props.navigation.navigate('SignIn')}>
                 <View style={{flexDirection:'row'}}>
                     <Text style={styles.textMenu}>CERRAR SESION</Text>
                       <Image style={styles.imageMenu} source={require("../images/logout.png")}/>

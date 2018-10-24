@@ -4,10 +4,22 @@ import {StackNavigator} from 'react-navigation';
 import Swiper from 'react-native-swiper';
 import {navigationActions} from 'react-navigation';
 import servicios from '../components/services.js';
-import Icon from 'react-native-vector-icons/Ionicons';
+{/*import Icon from 'react-native-vector-icons/Ionicons';*/}
 
  class mainPage extends Component {
 
+   static navigationOptions = {
+     title: 'REAL CARWASH',
+     headerStyle: {
+       backgroundColor: 'rgb(52,58,139)',
+     },
+     headerTitleStyle:{
+       fontWeight:'bold',
+       textAlign:'center',
+       paddingLeft:50,
+     },
+   }
+   
    constructor(props) {
     super(props)
       this.state={
@@ -44,6 +56,7 @@ import Icon from 'react-native-vector-icons/Ionicons';
   _showSelectedContact() {
    return this.state.selectServiceList.length;
  }
+
 
   render() {
     return (
@@ -84,9 +97,7 @@ import Icon from 'react-native-vector-icons/Ionicons';
                     <Image style={styles.imageMenu} source={item.urlImage}/>
                   <Text style={styles.buttonText}>{item.service}</Text>
                   <View style={{marginLeft:10, flexDirection:'row'}}>
-                {item.check ? (
-                  <Icon name='ios-checkmark-circle' size={50} color='white'></Icon>)
-                    : null}
+                {item.check ? <Text>CHECK</Text>: null}
                 </View>
               </View>
             </TouchableHighlight>}
@@ -101,7 +112,7 @@ import Icon from 'react-native-vector-icons/Ionicons';
               <View style={{flexDirection:'row', paddingLeft:180}}>
                 <Text style={styles.buttonTextNext}>SIGUIENTE</Text>
                 <View style={{marginLeft:20, flexDirection:'row'}}>
-                  <Icon name='ios-arrow-forward' size={40} color='#343a8b'></Icon>
+                  <Text>FLECHA</Text>
                 </View>
               </View>
           </TouchableHighlight>):null}
