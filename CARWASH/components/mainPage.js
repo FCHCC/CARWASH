@@ -4,22 +4,38 @@ import {StackNavigator} from 'react-navigation';
 import Swiper from 'react-native-swiper';
 import {navigationActions} from 'react-navigation';
 import servicios from '../components/services.js';
+
 {/*import Icon from 'react-native-vector-icons/Ionicons';*/}
 
  class mainPage extends Component {
 
-   static navigationOptions = {
-     title: 'REAL CARWASH',
-     headerStyle: {
-       backgroundColor: 'rgb(52,58,139)',
-     },
-     headerTitleStyle:{
-       fontWeight:'bold',
-       textAlign:'center',
-       paddingLeft:50,
-     },
-   }
-   
+   static navigationOptions = ({ navigation }) => {
+    const { state } = navigation;
+    return {
+      headerStyle:{
+        backgroundColor: 'rgb(52,58,139)',
+      },
+      headerTitleStyle:{
+        fontWeight:'bold',
+        textAlign:'center',
+        paddingLeft:50,
+      },
+      title: "REALCARWASH",
+      headerTintColor:'white',
+         headerLeft: (
+           <View style={{paddingLeft:20}}>
+           <TouchableHighlight
+               onPress={()=>{
+                 navigation.openDrawer();
+               }}>
+                 <Image source={require("../images/menuicon.png")}/>
+               </TouchableHighlight>
+            </View>   
+      ),
+    };
+  };
+
+
    constructor(props) {
     super(props)
       this.state={

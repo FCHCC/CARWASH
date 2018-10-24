@@ -1,6 +1,7 @@
 import React , {Component} from 'react';
 import {navigationActions} from 'react-navigation';
 import {ScrollView,Text, View, StyleSheet,Image,TouchableHighlight} from 'react-native';
+import { onSignOut } from "../auth";
 
 class sideMenu extends Component{
 
@@ -49,7 +50,7 @@ class sideMenu extends Component{
 
           <View>
             <TouchableHighlight style={styles.containerMenu} underlayColor="#2c67b2"
-                onPress={()=> this.props.navigation.navigate('SignIn')}>
+                onPress={() => onSignOut().then(() => this.props.navigation.navigate("SignedOut"))}>
                 <View style={{flexDirection:'row'}}>
                     <Text style={styles.textMenu}>CERRAR SESION</Text>
                       <Image style={styles.imageMenu} source={require("../images/logout.png")}/>

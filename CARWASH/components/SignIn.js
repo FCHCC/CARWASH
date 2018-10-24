@@ -12,6 +12,7 @@ import {Text,
         Alert,
       } from 'react-native';
 import {createStackNavigator} from 'react-navigation';
+import { onSignIn } from "../auth";
 
 
 export default ({navigation})=>(

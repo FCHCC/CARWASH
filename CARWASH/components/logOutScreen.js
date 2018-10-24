@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-
+import { onSignOut } from "../auth";
 class historyScreen extends Component{
   render(){
     return(
