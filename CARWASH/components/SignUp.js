@@ -14,6 +14,7 @@ import {Text,
 import {createStackNavigator} from 'react-navigation';
 import { onSignIn } from "../auth";
 import firebase from 'react-native-firebase'
+import {AccessToken,LoginManager,LogginButton} from 'react-native-fbsdk';
 
 class SignUp extends Component {
   constructor(props){
@@ -24,6 +25,7 @@ class SignUp extends Component {
     }
 
     this.SignUpUser = this.SignUpUser.bind(this);
+    this.LoginFacebook = this.LoginFacebook.bind(this);
   }
 
 SignUpUser=()=>{
@@ -32,6 +34,31 @@ SignUpUser=()=>{
   .then(()=> this.props.navigation.navigate('SignedIn'))
 
 }
+
+LoginFacebook=()=>{
+  LoginManager.logInWithReadPermissions(['public_profile','email'])
+              .then((result)=>{
+                  if(result.isCanceled){
+                      return Promise.reject(new Error('The user cancelled the request'));
+                  }
+                  console.log('Login success with permissions: ${result.grantedPermissions.toString()}');
+
+                  return AccessToken.getCurrentAccessToken();
+              })
+              .then(data => {
+                const credential = firebase.auth.FacebookAuthProvider.credential(data.accessToken);
+                return firebase.auth().signInWithCredential(credential);
+              })
+              .then(()=> this.props.navigation.navigate('SignedIn'))
+              .then((currentUser)=>{
+                console.log('Facebook Login with user: ${JSON.stringify(currentUser.toJSON())}');
+              })
+              .catch((error)=>{
+                console.log('Facebook Login fail with error: ${error}');
+              })
+
+}
+
 
 render(){
 return(
@@ -65,15 +92,15 @@ return(
                 </View>
               </TouchableHighlight>
 
-              <TouchableHighlight>
+              <TouchableHighlight onPress={this.LoginFacebook}>
                 <View style={styles.buttonFacebook}>
-                  <Text style={styles.buttonText}>REGISTRARSE CON FACEBOOK</Text>
+                  <Text style={styles.buttonText}>INICIAR SESION CON FACEBOOK</Text>
                 </View>
               </TouchableHighlight>
 
               <TouchableHighlight>
                 <View style={styles.buttonGoogle}>
-                  <Text style={styles.buttonText}>REGISTRARSE CON GOOGLE</Text>
+                  <Text style={styles.buttonText}>INICIAR SESION CON GOOGLE</Text>
                 </View>
               </TouchableHighlight>
 

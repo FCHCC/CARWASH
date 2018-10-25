@@ -66,13 +66,13 @@ render(){
 
               <TouchableHighlight>
                 <View style={styles.buttonFacebook}>
-                  <Text style={styles.buttonText}>REGISTRARSE CON FACEBOOK</Text>
+                  <Text style={styles.buttonText}>INICIAR SESION CON FACEBOOK</Text>
                 </View>
               </TouchableHighlight>
 
               <TouchableHighlight>
                 <View style={styles.buttonGoogle}>
-                  <Text style={styles.buttonText}>REGISTRARSE CON GOOGLE</Text>
+                  <Text style={styles.buttonText}>INICIAR SESION CON GOOGLE</Text>
                 </View>
               </TouchableHighlight>
             </View>
