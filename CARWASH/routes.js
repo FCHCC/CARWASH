@@ -1,4 +1,4 @@
-import {  StackNavigator,DrawerNavigator,SwitchNavigator, createSwitchNavigator,createDrawerNavigator} from 'react-navigation';
+import {  createStackNavigator,DrawerNavigator,SwitchNavigator, createSwitchNavigator,createDrawerNavigator} from 'react-navigation';
 import sideMenu from './components/sideMenu.js';
 import mainPage from './components/mainPage.js';
 import commentsScreen from './components/commentsScreen.js';
@@ -12,7 +12,7 @@ import { Text,Platform, StatusBar,Button,Image } from "react-native";
 
 
 
-export const SignedOut = StackNavigator({
+export const SignedOut = createStackNavigator({
   SignUp:{
     screen: SignUp,
     navigationOptions:{
@@ -30,7 +30,10 @@ export const SignedOut = StackNavigator({
   },
 
   SignedIn:{
-    screen: SignedIn
+    screen: SignedIn,
+    navigationOptions:{
+    header:null
+  }
   }
 },
 );

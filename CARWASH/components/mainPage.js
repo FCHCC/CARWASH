@@ -30,7 +30,7 @@ import servicios from '../components/services.js';
                }}>
                  <Image source={require("../images/menuicon.png")}/>
                </TouchableHighlight>
-            </View>   
+            </View>
       ),
     };
   };
@@ -42,6 +42,8 @@ import servicios from '../components/services.js';
           services:servicios,
           selectServiceList:[],
       }
+
+      this.press = this.press.bind(this);
   }
 
   press = (data) => {
@@ -95,9 +97,6 @@ import servicios from '../components/services.js';
       </View>
 
         {/*BOTONES DE SERVICIOS*/}
-
-
-
       <FlatList
             data={this.state.services}
             keyExtractor={item => item.service}
@@ -113,7 +112,7 @@ import servicios from '../components/services.js';
                     <Image style={styles.imageMenu} source={item.urlImage}/>
                   <Text style={styles.buttonText}>{item.service}</Text>
                   <View style={{marginLeft:10, flexDirection:'row'}}>
-                {item.check ? <Text>CHECK</Text>: null}
+                {item.check ? <Image source={require("../images/checked.png")}/>: null}
                 </View>
               </View>
             </TouchableHighlight>}
@@ -128,7 +127,7 @@ import servicios from '../components/services.js';
               <View style={{flexDirection:'row', paddingLeft:180}}>
                 <Text style={styles.buttonTextNext}>SIGUIENTE</Text>
                 <View style={{marginLeft:20, flexDirection:'row'}}>
-                  <Text>FLECHA</Text>
+                <Image source={require("../images/arrow.png")}/>
                 </View>
               </View>
           </TouchableHighlight>):null}

@@ -5,6 +5,9 @@ import {Text, View,StyleSheet,TouchableHighlight,Image,Alert} from 'react-native
 import {StackNavigator} from 'react-navigation';
 import { isSignedIn } from "./auth.js";
 import { createRootNavigator } from "./routes.js";
+import firebase from 'react-native-firebase';
+
+
 
 {/*const Application = StackNavigator({
   Home: {screen :login ,navigationOptions:{

@@ -30,7 +30,7 @@ const ServicePageStack = createStackNavigator({
 })
 
 
-export default SignedIn = DrawerNavigator(
+export default SignedIn = createDrawerNavigator(
   {
   mainPage: mainPageStack,
   historyScreen:historyScreenStack,

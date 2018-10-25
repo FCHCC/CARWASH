@@ -13,21 +13,38 @@ import {Text,
       } from 'react-native';
 import {createStackNavigator} from 'react-navigation';
 import { onSignIn } from "../auth";
+import firebase from 'react-native-firebase'
 
+class SignUp extends Component {
+  constructor(props){
+    super(props)
+    this.state={
+      email:'',
+      password:''
+    }
 
-export default ({navigation}) =>(
+    this.SignUpUser = this.SignUpUser.bind(this);
+  }
+
+SignUpUser=()=>{
+
+  firebase.auth().createUserWithEmailAndPassword(this.state.email,this.state.password)
+  .then(()=> this.props.navigation.navigate('SignedIn'))
+
+}
+
+render(){
+return(
         <KeyboardAvoidingView behavior='padding' style={styles.wrapper}>
-
-
             <View style={styles.image}><Image style={{width:200,height:200}} source={require('CARWASH/images/LOGOCARWASH.jpg')} /></View>
               <View style={styles.container}>
 
 
-              <TextInput style={styles.textInput} placeholder='Usuario' underlineColorAndroid="transparent"
-                        onChangeText={(username) => this.setState({username})}/>
+              <TextInput style={styles.textInput} placeholder='Correo' value={this.state.email} underlineColorAndroid="transparent"
+                        onChangeText={email => this.setState({email})}/>
 
-              <TextInput style={styles.textInput} placeholder='Contraseña' underlineColorAndroid="transparent"
-                          onChangeText={(password)=>this.setState({password})}/>
+              <TextInput style={styles.textInput} placeholder='Contraseña' value={this.state.password} underlineColorAndroid="transparent"
+                          onChangeText={password=>this.setState({password})}/>
 
             </View>
 
@@ -36,15 +53,15 @@ export default ({navigation}) =>(
 
             <View style={styles.containerButton}>
 
-              <TouchableHighlight onPress={() => {onSignIn().then(() => navigation.navigate("SignedIn"));}}>
+              <TouchableHighlight onPress={this.SignUpUser}>
                 <View style={styles.buttonLogin}>
-                  <Text style={styles.buttonText}>SIGN UP</Text>
+                  <Text style={styles.buttonText}>REGISTRARSE</Text>
                 </View>
               </TouchableHighlight>
 
-              <TouchableHighlight onPress={() => navigation.navigate("SignIn")}>
+              <TouchableHighlight onPress={() => this.props.navigation.navigate("SignIn")}>
                 <View style={styles.buttonLogin}>
-                  <Text style={styles.buttonText}>SIGN IN</Text>
+                  <Text style={styles.buttonText}>INICIAR SESION</Text>
                 </View>
               </TouchableHighlight>
 
@@ -64,7 +81,8 @@ export default ({navigation}) =>(
             </View>
         </KeyboardAvoidingView>
     );
-
+}
+}
 
 
 
@@ -139,3 +157,4 @@ const styles= StyleSheet.create({
 
   },
 })
+export default SignUp;

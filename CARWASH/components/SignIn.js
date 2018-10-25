@@ -12,10 +12,32 @@ import {Text,
         Alert,
       } from 'react-native';
 import {createStackNavigator} from 'react-navigation';
-import { onSignIn } from "../auth";
+import firebase from 'react-native-firebase'
+
+class SignIn extends Component{
+
+  constructor(props){
+    super(props)
+    this.state={
+      email:'prueba@correo.com',
+      password:'prueba'
+    }
+
+    this.SignInUser = this.SignInUser.bind(this);
+  }
+
+  SignInUser = () => {
+
+      firebase
+        .auth()
+        .signInWithEmailAndPassword(this.state.email, this.state.password)
+        .then(() => this.props.navigation.navigate('SignedIn'))
+    }
 
 
-export default ({navigation})=>(
+
+render(){
+  return(
         <KeyboardAvoidingView behavior='padding' style={styles.wrapper}>
 
 
@@ -23,10 +45,10 @@ export default ({navigation})=>(
               <View style={styles.container}>
 
 
-              <TextInput style={styles.textInput} placeholder='Usuario' underlineColorAndroid="transparent"
-                        onChangeText={(username) => this.setState({username})}/>
+              <TextInput style={styles.textInput} placeholder='Correo' value={this.state.email} underlineColorAndroid="transparent"
+                        onChangeText={(email) => this.setState({email})}/>
 
-              <TextInput style={styles.textInput} placeholder='Contraseña' underlineColorAndroid="transparent"
+              <TextInput style={styles.textInput} placeholder='Contraseña' value={this.state.password} underlineColorAndroid="transparent"
                           onChangeText={(password)=>this.setState({password})}/>
 
             </View>
@@ -36,7 +58,7 @@ export default ({navigation})=>(
 
             <View style={styles.containerButton}>
 
-              <TouchableHighlight onPress={() => {onSignIn().then(() => navigation.navigate("SignedIn"));}}>
+              <TouchableHighlight onPress={this.SignInUser}>
                 <View style={styles.buttonLogin}>
                   <Text style={styles.buttonText}>INICIAR SESION</Text>
                 </View>
@@ -56,6 +78,8 @@ export default ({navigation})=>(
             </View>
         </KeyboardAvoidingView>
     );
+  }
+}
 
 const styles= StyleSheet.create({
   wrapper:{
@@ -128,3 +152,5 @@ const styles= StyleSheet.create({
 
   },
 })
+
+export default SignIn;
