@@ -14,24 +14,60 @@ import {Text,
 import {createStackNavigator} from 'react-navigation';
 import { onSignIn } from "../auth";
 import firebase from 'react-native-firebase'
-import {AccessToken,LoginManager,LogginButton} from 'react-native-fbsdk';
+import {AccessToken,LoginManager,LogginButton,ActivityIndicator} from 'react-native-fbsdk';
+import { GoogleSignin } from 'react-native-google-signin';
 
 class SignUp extends Component {
   constructor(props){
     super(props)
+    this.unsubscriber=null;
     this.state={
       email:'',
-      password:''
+      password:'',
     }
 
     this.SignUpUser = this.SignUpUser.bind(this);
     this.LoginFacebook = this.LoginFacebook.bind(this);
+    this.LoginGoogle = this.LoginGoogle.bind(this);
   }
+
+
+componentDidMount(){
+  this.unsubscriber = firebase.auth().onAuthStateChanged((changedUser)=>{
+    this.setState({
+      user:changedUser
+    });
+  })
+
+  GoogleSignin.configure({
+    scopes: ['https://www.googleapis.com/auth/drive.readonly'],
+    webClientId: '84437009526-griuuecf6u6j1d205j9jrade3nrvk11r.apps.googleusercontent.com',
+  });
+
+}
+
+componentWillUnmount(){
+  if(this.unsubscriber){
+    this.unsubscriber();
+  }
+}
+
+
 
 SignUpUser=()=>{
 
+
   firebase.auth().createUserWithEmailAndPassword(this.state.email,this.state.password)
-  .then(()=> this.props.navigation.navigate('SignedIn'))
+          .then(()=> {
+
+            this.props.navigation.navigate('SignedIn')
+            })
+          .then((loggedInUser) => {
+                console.log(`Register with user : ${JSON.stringify(loggedInUser.toJSON())}`);
+              })
+          .catch((error) => {
+                console.log(`Register fail with error: ${error}`);
+              });
 
 }
 
@@ -41,7 +77,7 @@ LoginFacebook=()=>{
                   if(result.isCanceled){
                       return Promise.reject(new Error('The user cancelled the request'));
                   }
-                  console.log('Login success with permissions: ${result.grantedPermissions.toString()}');
+                  console.log(`Login success with permissions: ${result.grantedPermissions.toString()}`);
 
                   return AccessToken.getCurrentAccessToken();
               })
@@ -49,20 +85,36 @@ LoginFacebook=()=>{
                 const credential = firebase.auth.FacebookAuthProvider.credential(data.accessToken);
                 return firebase.auth().signInWithCredential(credential);
               })
-              .then(()=> this.props.navigation.navigate('SignedIn'))
+              .then(()=>this.props.navigation.navigate('SignedIn'))
               .then((currentUser)=>{
-                console.log('Facebook Login with user: ${JSON.stringify(currentUser.toJSON())}');
+                console.log(`Facebook Login with user: ${JSON.stringify(currentUser.toJSON())}`);
               })
               .catch((error)=>{
-                console.log('Facebook Login fail with error: ${error}');
+                console.log(`Facebook Login fail with error: ${error}`);
               })
 
 }
 
+LoginGoogle=()=>{
+
+  GoogleSignin
+          .signIn()
+          .then((data)=>{
+            const credential = firebase.auth.GoogleAuthProvider.credential(data.idToken, data.accessToken);
+            return firebase.auth().signInWithCredential(credential);
+            })
+          .then(()=>this.props.navigation.navigate('SignedIn'))
+          .then((currentUser)=>{
+              console.log(`Google Login with user : ${JSON.stringify(currentUser.toJSON())}`);
+            })
+          .catch((error)=>{
+              console.log(error);
+          });
+}
 
 render(){
 return(
-        <KeyboardAvoidingView behavior='padding' style={styles.wrapper}>
+          <KeyboardAvoidingView behavior='padding' style={styles.wrapper}>
             <View style={styles.image}><Image style={{width:200,height:200}} source={require('CARWASH/images/LOGOCARWASH.jpg')} /></View>
               <View style={styles.container}>
 
@@ -98,7 +150,7 @@ return(
                 </View>
               </TouchableHighlight>
 
-              <TouchableHighlight>
+              <TouchableHighlight onPress={this.LoginGoogle}>
                 <View style={styles.buttonGoogle}>
                   <Text style={styles.buttonText}>INICIAR SESION CON GOOGLE</Text>
                 </View>
@@ -179,7 +231,7 @@ const styles= StyleSheet.create({
   marginLeft:55,
   margin:20,
   width:300,
-  height:170,
+  height:180,
 
 
   },

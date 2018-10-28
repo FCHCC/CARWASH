@@ -10,6 +10,7 @@ import {Text,
         Button,
         TouchableHighlight,
         Alert,
+        ActivityIndicator
       } from 'react-native';
 import {createStackNavigator} from 'react-navigation';
 import firebase from 'react-native-firebase'
@@ -20,25 +21,40 @@ class SignIn extends Component{
     super(props)
     this.state={
       email:'prueba@correo.com',
-      password:'prueba'
+      password:'prueba',
+      loading:false,
     }
 
     this.SignInUser = this.SignInUser.bind(this);
   }
 
   SignInUser = () => {
-
+      this.setState({ loading: true});
       firebase
         .auth()
         .signInWithEmailAndPassword(this.state.email, this.state.password)
         .then(() => this.props.navigation.navigate('SignedIn'))
+        .then((userData)=>{
+          this.setState({
+                loading: false
+              });
+              AsyncStorage.setItem('userData', JSON.stringify(userData));
+              this.props.navigation.navigate('SignedIn')
+        })
+        .catch((error)=>{
+          this.setState({
+                loading: false
+              });
+          Alert('ERROR AL INICIAR SESIÓN, INTENTELO NUEVAMENTE'+ error);    
+          console.log('LOGIN FAILED' + error);
+        })
     }
 
 
 
 render(){
   return(
-        <KeyboardAvoidingView behavior='padding' style={styles.wrapper}>
+      this.state.loading ? <ActivityIndicator /> : <KeyboardAvoidingView behavior='padding' style={styles.wrapper}>
 
 
             <View style={styles.image}><Image style={{width:200,height:200}} source={require('CARWASH/images/LOGOCARWASH.jpg')} /></View>

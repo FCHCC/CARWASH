@@ -1,9 +1,28 @@
 import React , {Component} from 'react';
 import {navigationActions} from 'react-navigation';
 import {ScrollView,Text, View, StyleSheet,Image,TouchableHighlight} from 'react-native';
-import { onSignOut } from "../auth";
+import firebase  from 'react-native-firebase';
+import { GoogleSignin } from 'react-native-google-signin';
+
 
 class sideMenu extends Component{
+
+  constructor(props){
+    super(props)
+    this.SignOut= this.SignOut.bind(this);
+  }
+
+  SignOut = () => {
+
+          GoogleSignin
+          .revokeAccess()
+          .signOut()
+          .then(()=>this.props.navigation.navigate('SignIn'))
+          .catch((error) =>{
+              console.log(error);
+            })
+  }
+
 
   render(){
     return(
@@ -50,7 +69,7 @@ class sideMenu extends Component{
 
           <View>
             <TouchableHighlight style={styles.containerMenu} underlayColor="#2c67b2"
-                onPress={() => onSignOut().then(() => this.props.navigation.navigate("SignedOut"))}>
+                onPress={this.SingOut}>
                 <View style={{flexDirection:'row'}}>
                     <Text style={styles.textMenu}>CERRAR SESION</Text>
                       <Image style={styles.imageMenu} source={require("../images/logout.png")}/>
