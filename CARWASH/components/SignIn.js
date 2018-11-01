@@ -35,9 +35,6 @@ class SignIn extends Component{
         .signInWithEmailAndPassword(this.state.email, this.state.password)
         .then(() => this.props.navigation.navigate('SignedIn'))
         .then((userData)=>{
-          this.setState({
-                loading: false
-              });
               AsyncStorage.setItem('userData', JSON.stringify(userData));
               this.props.navigation.navigate('SignedIn')
         })
@@ -45,7 +42,7 @@ class SignIn extends Component{
           this.setState({
                 loading: false
               });
-          Alert('ERROR AL INICIAR SESIÓN, INTENTELO NUEVAMENTE'+ error);    
+          Alert('ERROR AL INICIAR SESIÓN, INTENTELO NUEVAMENTE'+ error);
           console.log('LOGIN FAILED' + error);
         })
     }

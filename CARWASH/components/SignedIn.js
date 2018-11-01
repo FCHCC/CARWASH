@@ -4,7 +4,7 @@ import mainPage from '../components/mainPage.js';
 import commentsScreen from '../components/commentsScreen.js';
 import logOutScreen from '../components/logOutScreen.js';
 import historyScreen from '../components/historyScreen.js';
-import ServicePage from '../components/servicePage.js';
+import ServicePage from '../components/ServicePage.js';
 import SignIn from '../components/SignIn.js';
 import SignUp from '../components/SignUp.js';
 import { Platform, StatusBar } from "react-native";

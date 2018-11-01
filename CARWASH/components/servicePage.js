@@ -3,9 +3,10 @@ import {Text, View,StyleSheet,TouchableHighlight,ScrollView,Image,FlatList,Picke
 import {StackNavigator} from 'react-navigation';
 import Swiper from 'react-native-swiper';
 import {navigationActions} from 'react-navigation';
-import servicios from '../components/services.js';
+import servicios from '../components/servicios.js';
 import ModalSelector from 'react-native-modal-selector';
 import DatePicker from 'react-native-datepicker';
+import mainPage from '../components/mainPage.js'
 
 class ServicePage extends Component{
 
@@ -38,7 +39,7 @@ class ServicePage extends Component{
     constructor(props){
       super(props)
         this.state = {
-          selectedServiceList:'',
+          selectedServiceList:[],
           carsSelected:[],
           date:'',
            time: '',
@@ -53,6 +54,8 @@ press=(data)=>{
 }
 
   render(){
+    const serv=this.props.navigation.state.params.serv;
+    console.log(serv);
     return(
       <View style={{flex:1, backgroundColor:'white'}} >
 
@@ -62,8 +65,8 @@ press=(data)=>{
                 color:'#343a8b', textAlign:'center'}} >SERVICIOS QUE ELEGISTE: </Text>
           </View>
 
-        {/*}  <View style={styles.button}>
-            {this.state.selectedServiceList.map((service,id)=>{
+      {/*  <View style={styles.button}>
+            {serviceList.map((service,id)=>{
                 return (
 
                   <View key={id} style={{width:150}}>
@@ -72,18 +75,17 @@ press=(data)=>{
                 )
               })}
 
-          this.state.selectServiceList.map((service,id)=>{
-            service.price.map((price,key)=>{
-              return(
-                  <ModalSelector
-                    data={price.car}
-                    onChange={()=> this.press(item)}
-                    >
-
-                  </ModalSelector>
-              )
-            })
-          })
+              {serviceList.map((service,id)=>{
+                service.cost.map((cost,key)=>{
+                  return(
+                    <ModalSelector
+                      data={cost.car}
+                      onChange={()=> this.press(item)}
+                      >
+                      </ModalSelector>
+                    )
+                  })
+                })}
 
            </View>*/}
 

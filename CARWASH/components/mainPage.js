@@ -1,9 +1,11 @@
 import React, {Component} from 'react';
-import {Text, View,StyleSheet,TouchableHighlight,ScrollView,Image,FlatList} from 'react-native';
+import {Text, View,StyleSheet,TouchableHighlight,ScrollView,Image,FlatList,Modal} from 'react-native';
 import {StackNavigator} from 'react-navigation';
 import Swiper from 'react-native-swiper';
+import DatePicker from 'react-native-datepicker';
 import {navigationActions} from 'react-navigation';
-import servicios from '../components/services.js';
+import servicios from '../components/servicios.js';
+
 
 {/*import Icon from 'react-native-vector-icons/Ionicons';*/}
 
@@ -39,20 +41,30 @@ import servicios from '../components/services.js';
    constructor(props) {
     super(props)
       this.state={
-          services:servicios,
+          services:[],
           selectServiceList:[],
+          modalVisible:false,
+          date:'',
+          time: '',
+          carsSelected:[],
       }
 
       this.press = this.press.bind(this);
+      this.showSelectedService = this.showSelectedService.bind(this);
+      this.pressCarSelector = this.pressCarSelector.bind(this);
   }
 
   press = (data) => {
-      this.state.services.map((item)=>{
+
+     let serviceList = this.state.services;
+      serviceList.map((item)=>{
         if(item.service === data.service){
           item.check = !item.check
           if(item.check === true){
-            this.state.selectServiceList.push(item);
+              let s = item;
+              this.state.selectServiceList.push(s)
             console.log('select'+item.service);
+              console.log('item'+JSON.stringify(s));
           }else if(item.check === false){
             const i = this.state.selectServiceList.indexOf(item.service,item.price)
             if(1 != -1){
@@ -66,17 +78,32 @@ import servicios from '../components/services.js';
 
       this.setState(
         {
-          services: this.state.services
+          services: serviceList
         }
       )
   }
 
-  _showSelectedContact() {
+  componentDidMount(){
+    this.setState({
+        services:servicios
+    })
+  }
+
+  showSelectedService() {
    return this.state.selectServiceList.length;
  }
 
+ pressCarSelector=(data)=>{
+     if(data >= 1){
+       this.state.carsSelected.push(data);
+     }
+ }
+
+
 
   render() {
+    const servicesSelectedList = this.state.selectServiceList
+    console.log("servicios seleccionados"+servicesSelectedList);
     return (
       <View style={{flex:1, backgroundColor:'white'}} >
 
@@ -101,7 +128,6 @@ import servicios from '../components/services.js';
             data={this.state.services}
             keyExtractor={item => item.service}
             extraData={this.state}
-
             renderItem={({item,index})=>
               {return <TouchableHighlight
                 index={index}
@@ -110,29 +136,109 @@ import servicios from '../components/services.js';
                 onPress={()=> {this.press(item)}}>
                 <View style={{flexDirection:'row'}}>
                     <Image style={styles.imageMenu} source={item.urlImage}/>
-                  <Text style={styles.buttonText}>{item.service}</Text>
+                    <Text style={styles.buttonText}>{item.service}</Text>
                   <View style={{marginLeft:10, flexDirection:'row'}}>
-                {item.check ? <Image source={require("../images/checked.png")}/>: null}
+                    {item.check ? <Image source={require("../images/checked.png")}/>: null}
+                  </View>
                 </View>
-              </View>
             </TouchableHighlight>}
           }
 
         />
 
-          {(this.state.selectServiceList.length>0) ? (
-            <TouchableHighlight
-              style={styles.buttonNext}
-              onPress={()=> this.props.navigation.navigate('ServicePage',{selectServiceList:this.state.selectServiceList})}>
-              <View style={{flexDirection:'row', paddingLeft:180}}>
-                <Text style={styles.buttonTextNext}>SIGUIENTE</Text>
-                <View style={{marginLeft:20, flexDirection:'row'}}>
-                <Image source={require("../images/arrow.png")}/>
-                </View>
+
+            <Modal
+              animationType="slide"
+              transparent={false}
+              visible={this.state.modalVisible}
+              onRequestClose={()=>{
+                Alert.alert('CLOSE');
+              }}>
+
+              <View style={styles.containerButton}>
+                    <Text style={{fontSize:25,
+                        fontWeight:'bold',
+                        color:'#343a8b', textAlign:'center'}} >SERVICIOS QUE ELEGISTE: </Text>
+
+                              {servicesSelectedList.map((serv,id)=>{
+                                  console.log('mapping')
+                                  return (
+                                    <View key={id} style={{width:150 , justifyContent:'center'}}>
+                                        <Text style={styles.textService}>{serv.service}</Text>
+                                    </View>
+                                  )
+
+
+                                })}
+
+
+
+
+                   <Text>TIPO DE CARRO</Text>
+
+
+                     <DatePicker
+                       style={styles.datePicker}
+                       date={this.state.date}
+                       mode="date"
+                       placeholder="select date"
+                       format="YYYY-MM-DD"
+                       minDate="2018-05-01"
+                       maxDate="2030-06-01"
+                       confirmBtnText="Confirm"
+                       cancelBtnText="Cancel"
+                       onDateChange={(date) => {this.setState({date: date})}}
+                       />
+
+
+
+                   <DatePicker
+                     style={styles.datePicker}
+                     date={this.state.time}
+                     mode="time"
+                     format="HH:mm"
+                     confirmBtnText="Confirm"
+                     cancelBtnText="Cancel"
+                     minuteInterval={10}
+                     onDateChange={(time) => {this.setState({time: time});}}
+                     />
+
+
+
+                  <TouchableHighlight>
+                    <View style={styles.buttonLogin}>
+                      <Text style={styles.buttonTextModal}>RESERVAR</Text>
+                    </View>
+                </TouchableHighlight>
+
+                <TouchableHighlight
+                onPress={() => {
+              this.setState({modalVisible:!this.state.modalVisible, selectServiceList:[]});
+            }}>
+                  <View style={styles.buttonLogin}>
+                    <Text style={styles.buttonTextModal}>CANCELAR</Text>
+                  </View>
+              </TouchableHighlight>
               </View>
-          </TouchableHighlight>):null}
+
+          </Modal>
+
+          {(servicesSelectedList.length>0) ? (<TouchableHighlight
+              style={styles.buttonNext}
+              onPress={() => {
+            this.setState({modalVisible:true})
+          }}>
+          <View style={{flexDirection:'row', paddingLeft:180}}>
+            <Text style={styles.buttonTextNext}>SIGUIENTE</Text>
+            <View style={{marginLeft:20, flexDirection:'row'}}>
+            <Image source={require("../images/arrow.png")}/>
+            </View>
+          </View>
+        </TouchableHighlight>): null}
+
 
       </View>
+
     );
   }
 
@@ -203,7 +309,43 @@ const styles = StyleSheet.create({
     width:60,
     height:60,
     paddingLeft:30,
-  }
+  },
+  datePicker:{
+    width:250,
+    borderColor:'#343a8b',
+    borderWidth:2,
+    borderRadius:5,
+    margin:20,
+
+  },
+  buttonLogin:{
+    backgroundColor:'#343a8b',
+    borderRadius:10,
+    margin:20,
+  },
+  containerButton:{
+  justifyContent:'center',
+  marginLeft:55,
+  margin:20,
+  },
+  buttonTextModal:{
+    padding:20,
+    color:'white',
+    textAlign:'center',
+    fontSize:15,
+    fontWeight:'bold',
+  },
+
+  textService:{
+    fontSize:22,
+    fontWeight:'bold',
+    color:'#343a8b',
+  },
+  buttonService:{
+    display:'flex',
+    flexDirection:'row',
+    borderColor:'#2c67b2',
+  },
 })
 
 
