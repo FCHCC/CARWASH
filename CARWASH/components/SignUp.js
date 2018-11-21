@@ -25,7 +25,7 @@ class SignUp extends Component {
     this.state={
       email:'',
       password:'',
-      user:null,
+      user:[],
     }
 
     this.SignUpUser = this.SignUpUser.bind(this);
@@ -35,9 +35,11 @@ class SignUp extends Component {
 
 
 componentDidMount(){
-  this.unsubscriber = firebase.auth().onAuthStateChanged((user) => {
-     this.setState({ user });
+  this.unsubscriber = firebase.auth().onAuthStateChanged((Changeduser) => {
+    console.info(`changed User : ${JSON.stringify(Changeduser)}`);
+     this.state.user.push(Changeduser);
    });
+
   GoogleSignin.configure({
     scopes: ['https://www.googleapis.com/auth/drive.readonly'],
     webClientId: '84437009526-griuuecf6u6j1d205j9jrade3nrvk11r.apps.googleusercontent.com',
@@ -62,7 +64,7 @@ SignUpUser=()=>{
             this.props.navigation.navigate('SignedIn')
             })
           .then((loggedInUser) => {
-                console.log(`Register with user : ${JSON.stringify(loggedInUser.toJSON())}`);
+                console.info(`Register with user : ${JSON.stringify(loggedInUser)}`);
               })
           .catch((error) => {
                 console.log(`Register fail with error: ${error}`);
@@ -71,25 +73,29 @@ SignUpUser=()=>{
 }
 
 LoginFacebook=()=>{
-  LoginManager.logInWithReadPermissions(['public_profile','email'])
-              .then((result)=>{
-                  if(result.isCanceled){
-                      return Promise.reject(new Error('The user cancelled the request'));
-                  }
-                  console.log(`Login success with permissions: ${result.grantedPermissions.toString()}`);
-
-                  return AccessToken.getCurrentAccessToken();
-              })
-              .then(data => {
+  LoginManager
+            .logInWithReadPermissions(['public_profile', 'email'])
+            .then((result) => {
+                if (result.isCancelled) {
+                    return Promise.reject(new Error('The user cancelled the request'));
+                }
+                console.log(`Login success with permissions: ${result.grantedPermissions.toString()}`);
+                // get the access token
+                return AccessToken.getCurrentAccessToken();
+            })
+            .then(data => {
                 const credential = firebase.auth.FacebookAuthProvider.credential(data.accessToken);
-                const currentUser = firebase.auth().signInWithCredential(credential);
-                console.info(JSON.stringify(currentUser.toJSON()))
-                return currentUser
-              })
-              .then(()=>this.props.navigation.navigate('SignedIn'))
-              .catch((error)=>{
-                console.log(`Facebook Login fail with error: ${error}`);
-              })
+                return firebase.auth().signInWithCredential(credential);
+            })
+            .then(()=>this.props.navigation.navigate('SignedIn'))
+            .then((currentUser) => {
+                console.info(`Facebook Login with user : ${JSON.stringify(currentUser)}`);
+            })
+            .catch((error) => {
+                console.log(`Facebook login fail with error: ${error}`);
+            });
+
+
 
 }
 
@@ -100,7 +106,7 @@ LoginGoogle=()=>{
           .then((data)=>{
             const credential = firebase.auth.GoogleAuthProvider.credential(data.idToken, data.accessToken);
             const currentUser = firebase.auth().signInWithCredential(credential);
-            console.info("CurrentUser: "+JSON.stringify(currentUser.toJSON))
+            console.info("CurrentUser: "+JSON.stringify(currentUser))
             return currentUser
             })
           .then(()=>this.props.navigation.navigate('SignedIn'))

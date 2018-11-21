@@ -1,8 +1,8 @@
 import React , {Component} from 'react';
 import {navigationActions} from 'react-navigation';
 import {ScrollView,Text, View, StyleSheet,Image,TouchableHighlight} from 'react-native';
-import firebase  from 'react-native-firebase';
 import { GoogleSignin } from 'react-native-google-signin';
+import firebase from 'react-native-firebase';
 
 
 class sideMenu extends Component{
@@ -11,62 +11,55 @@ class sideMenu extends Component{
     super(props)
 
     this.state={
-        user: null,
+        user: [],
         username:'',
         sessionChecked:false,
 
     }
-    this.SignOut= this.SignOut.bind(this);
-    this.UserProfile = this.UserProfile.bind(this);
+    this.SignOutUser= this.SignOutUser.bind(this);
+
+
   }
 
   componentDidMount(){
-    firebase.auth().onAuthStateChanged(user => {
-         this.setState({sessionChecked: true, user})
-         console.info("USERLOGGED");
-  })
-  }
-
-
-  SignOut = () => {
-
-    firebase.auth().signOut().then(function() {
-      console.log("SignOut SUCCESFULL")
-})
-.then(()=>this.props.navigation.navigate('SignIn'))
-.catch(function(error) {
-    console.log(error);
-});
-
-  }
-
-  UserProfile =()=>{
-    var user = this.state.user
-
-    firebase.auth().currentUser.then(()=>{
-    if (user != null) {
-      user.providerData.forEach(function (profile) {
-      console.log("Sign-in provider: " + profile.providerId);
-      console.log("  Provider-specific UID: " + profile.uid);
-      console.log("  Name: " + profile.displayName);
-      console.log("  Email: " + profile.email);
-      console.log("  Photo URL: " + profile.photoURL);
+    this.unsubscriber = firebase.auth().onAuthStateChanged((user) => {
+      console.info(`changed User : ${JSON.stringify(user)}`);
+      this.state.user.push(user);
+      console.info(this.state.user);
       this.setState({
-        username:profile.displayName
-      })
-    });
-}
-  })
+        sessionChecked:true
+      });
+    })
+
+
+
+   }
+
+  SignOutUser = () => {
+    firebase.auth().signOut()
+    .then(()=>this.props.navigation.navigate('SignIn'))
+    .catch(function(error) {
+      console.log(error);
+      });
   }
 
 
 
   render(){
+
     return(
       <View style={styles.container}>
         <View style={styles.containerProfile}>
           <View >
-            <Text onChange={this.UserProfile} style={styles.textProfile}>{this.state.username}</Text>
+
+            {this.state.user.map((u,item)=>{
+              console.log(u.email);
+              return(
+              <Text key={item} style={styles.textProfile}>{u.email}</Text>
+            )
+            })
+          }
+
             <Text style={styles.textProfile}>LAVADAS</Text>
           </View>
           <View style={styles.containerImageProfile} >
@@ -106,7 +99,7 @@ class sideMenu extends Component{
 
           <View>
             <TouchableHighlight style={styles.containerMenu} underlayColor="#2c67b2"
-                onPress={this.SingOut}>
+                onPress={()=>this.SignOutUser()}>
                 <View style={{flexDirection:'row'}}>
                     <Text style={styles.textMenu}>CERRAR SESION</Text>
                       <Image style={styles.imageMenu} source={require("../images/logout.png")}/>
