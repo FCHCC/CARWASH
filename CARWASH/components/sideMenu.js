@@ -9,19 +9,56 @@ class sideMenu extends Component{
 
   constructor(props){
     super(props)
+
+    this.state={
+        user: null,
+        username:'',
+        sessionChecked:false,
+
+    }
     this.SignOut= this.SignOut.bind(this);
+    this.UserProfile = this.UserProfile.bind(this);
   }
+
+  componentDidMount(){
+    firebase.auth().onAuthStateChanged(user => {
+         this.setState({sessionChecked: true, user})
+         console.info("USERLOGGED");
+  })
+  }
+
 
   SignOut = () => {
 
-          GoogleSignin
-          .revokeAccess()
-          .signOut()
-          .then(()=>this.props.navigation.navigate('SignIn'))
-          .catch((error) =>{
-              console.log(error);
-            })
+    firebase.auth().signOut().then(function() {
+      console.log("SignOut SUCCESFULL")
+})
+.then(()=>this.props.navigation.navigate('SignIn'))
+.catch(function(error) {
+    console.log(error);
+});
+
   }
+
+  UserProfile =()=>{
+    var user = this.state.user
+
+    firebase.auth().currentUser.then(()=>{
+    if (user != null) {
+      user.providerData.forEach(function (profile) {
+      console.log("Sign-in provider: " + profile.providerId);
+      console.log("  Provider-specific UID: " + profile.uid);
+      console.log("  Name: " + profile.displayName);
+      console.log("  Email: " + profile.email);
+      console.log("  Photo URL: " + profile.photoURL);
+      this.setState({
+        username:profile.displayName
+      })
+    });
+}
+  })
+  }
+
 
 
   render(){
@@ -29,7 +66,7 @@ class sideMenu extends Component{
       <View style={styles.container}>
         <View style={styles.containerProfile}>
           <View >
-            <Text style={styles.textProfile}>NOMBRE DE USUARIO</Text>
+            <Text onChange={this.UserProfile} style={styles.textProfile}>{this.state.username}</Text>
             <Text style={styles.textProfile}>LAVADAS</Text>
           </View>
           <View style={styles.containerImageProfile} >

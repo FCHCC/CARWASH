@@ -21,9 +21,11 @@ class SignUp extends Component {
   constructor(props){
     super(props)
     this.unsubscriber=null;
+
     this.state={
       email:'',
       password:'',
+      user:null,
     }
 
     this.SignUpUser = this.SignUpUser.bind(this);
@@ -33,12 +35,9 @@ class SignUp extends Component {
 
 
 componentDidMount(){
-  this.unsubscriber = firebase.auth().onAuthStateChanged((changedUser)=>{
-    this.setState({
-      user:changedUser
-    });
-  })
-
+  this.unsubscriber = firebase.auth().onAuthStateChanged((user) => {
+     this.setState({ user });
+   });
   GoogleSignin.configure({
     scopes: ['https://www.googleapis.com/auth/drive.readonly'],
     webClientId: '84437009526-griuuecf6u6j1d205j9jrade3nrvk11r.apps.googleusercontent.com',
@@ -83,12 +82,11 @@ LoginFacebook=()=>{
               })
               .then(data => {
                 const credential = firebase.auth.FacebookAuthProvider.credential(data.accessToken);
-                return firebase.auth().signInWithCredential(credential);
+                const currentUser = firebase.auth().signInWithCredential(credential);
+                console.info(JSON.stringify(currentUser.toJSON()))
+                return currentUser
               })
               .then(()=>this.props.navigation.navigate('SignedIn'))
-              .then((currentUser)=>{
-                console.log(`Facebook Login with user: ${JSON.stringify(currentUser.toJSON())}`);
-              })
               .catch((error)=>{
                 console.log(`Facebook Login fail with error: ${error}`);
               })
@@ -101,12 +99,11 @@ LoginGoogle=()=>{
           .signIn()
           .then((data)=>{
             const credential = firebase.auth.GoogleAuthProvider.credential(data.idToken, data.accessToken);
-            return firebase.auth().signInWithCredential(credential);
+            const currentUser = firebase.auth().signInWithCredential(credential);
+            console.info("CurrentUser: "+JSON.stringify(currentUser.toJSON))
+            return currentUser
             })
           .then(()=>this.props.navigation.navigate('SignedIn'))
-          .then((currentUser)=>{
-              console.log(`Google Login with user : ${JSON.stringify(currentUser.toJSON())}`);
-            })
           .catch((error)=>{
               console.log(error);
           });

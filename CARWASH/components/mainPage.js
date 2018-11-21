@@ -5,6 +5,8 @@ import Swiper from 'react-native-swiper';
 import DatePicker from 'react-native-datepicker';
 import {navigationActions} from 'react-navigation';
 import servicios from '../components/servicios.js';
+import ModalSelector from 'react-native-modal-selector';
+import firebase  from 'react-native-firebase';
 
 
 {/*import Icon from 'react-native-vector-icons/Ionicons';*/}
@@ -45,14 +47,36 @@ import servicios from '../components/servicios.js';
           selectServiceList:[],
           modalVisible:false,
           date:'',
-          time: '',
+          time:'',
           carsSelected:[],
+          service:[],
+
       }
+
+      this.ref = firebase.firestore().collection('reservas');
 
       this.press = this.press.bind(this);
       this.showSelectedService = this.showSelectedService.bind(this);
       this.pressCarSelector = this.pressCarSelector.bind(this);
+      this.writeReserva = this.writeReserva.bind(this);
   }
+
+  writeReserva=()=>{
+    this.ref.add({
+      Servicio: this.state.selectServiceList,
+      Carro: this.state.carsSelected,
+      Fecha: this.state.date,
+      Hora: this.state.time,
+    })
+    .then(()=>{
+    this.setState({modalVisible:!this.state.modalVisible});
+    console.info("date inserted in firebase");
+    })
+    .catch(error=>{
+      console.info("Error inserting data: " + error);
+    })
+  }
+
 
   press = (data) => {
 
@@ -84,19 +108,25 @@ import servicios from '../components/servicios.js';
   }
 
   componentDidMount(){
+    firebase.auth().onAuthStateChanged(user => {
+       if (user) {
     this.setState({
         services:servicios
-    })
+    });
+    console.info("CHECKED USER IN MAINPAGE");
   }
+})
+}
 
   showSelectedService() {
    return this.state.selectServiceList.length;
  }
 
  pressCarSelector=(data)=>{
-     if(data >= 1){
+
        this.state.carsSelected.push(data);
-     }
+       console.log('CAR SELECTED IN STATE');
+
  }
 
 
@@ -160,91 +190,89 @@ import servicios from '../components/servicios.js';
                         fontWeight:'bold',
                         color:'#343a8b', textAlign:'center'}} >SERVICIOS QUE ELEGISTE: </Text>
 
-                              {servicesSelectedList.map((serv,id)=>{
-                                  console.log('mapping')
-                                  return (
-                                    <View key={id} style={{width:150 , justifyContent:'center'}}>
-                                        <Text style={styles.textService}>{serv.service}</Text>
-                                    </View>
+                        {servicesSelectedList.map((serv,id)=>{
+                          console.log('mapping')
+                          return (
+                                <View key={id} style={{width:150 , justifyContent:'center'}}>
+                                  <Text style={styles.textService}>{serv.service}</Text>
+                                </View>
                                   )
+                                }
+                            )
+                        }
 
 
-                                })}
+                        <ModalSelector
+                            data={cars}
+                            style={styles.modalSelector}
+                            initValue="TIPO CARRO"
+                            keyExtractor={item=>item.id}
+                            labelExtractor={item=>item.label}
+                            animationType='fade'
+                            onChange={this.pressCarSelector}
+                            />
 
+                        <DatePicker
+                            style={styles.datePicker}
+                            date={this.state.date}
+                            mode="date"
+                            placeholder="select date"
+                            format="YYYY-MM-DD"
+                            minDate="2018-05-01"
+                            maxDate="2030-06-01"
+                            confirmBtnText="Confirm"
+                            cancelBtnText="Cancel"
+                            onDateChange={(date) => {this.setState({date: date})}}
+                            />
 
+                        <DatePicker
+                            style={styles.datePicker}
+                            date={this.state.time}
+                            mode="time"
+                            format="HH:mm"
+                            confirmBtnText="Confirm"
+                            cancelBtnText="Cancel"
+                            minuteInterval={10}
+                            onDateChange={(time) => {this.setState({time: time});}}
+                            />
 
+                        <TouchableHighlight onPress={this.writeReserva}>
+                          <View style={styles.buttonLogin}>
+                            <Text style={styles.buttonTextModal}>RESERVAR</Text>
+                          </View>
+                        </TouchableHighlight>
 
-                   <Text>TIPO DE CARRO</Text>
+                        <TouchableHighlight
+                          onPress={() => {
+                            const empty =[]
+                            this.setState({modalVisible:!this.state.modalVisible, selectServiceList:[]});
+                            }}>
+                              <View style={styles.buttonLogin}>
+                                <Text style={styles.buttonTextModal}>CANCELAR</Text>
+                              </View>
+                        </TouchableHighlight>
+                </View>
+            </Modal>
 
-
-                     <DatePicker
-                       style={styles.datePicker}
-                       date={this.state.date}
-                       mode="date"
-                       placeholder="select date"
-                       format="YYYY-MM-DD"
-                       minDate="2018-05-01"
-                       maxDate="2030-06-01"
-                       confirmBtnText="Confirm"
-                       cancelBtnText="Cancel"
-                       onDateChange={(date) => {this.setState({date: date})}}
-                       />
-
-
-
-                   <DatePicker
-                     style={styles.datePicker}
-                     date={this.state.time}
-                     mode="time"
-                     format="HH:mm"
-                     confirmBtnText="Confirm"
-                     cancelBtnText="Cancel"
-                     minuteInterval={10}
-                     onDateChange={(time) => {this.setState({time: time});}}
-                     />
-
-
-
-                  <TouchableHighlight>
-                    <View style={styles.buttonLogin}>
-                      <Text style={styles.buttonTextModal}>RESERVAR</Text>
-                    </View>
-                </TouchableHighlight>
-
-                <TouchableHighlight
-                onPress={() => {
-              this.setState({modalVisible:!this.state.modalVisible, selectServiceList:[]});
-            }}>
-                  <View style={styles.buttonLogin}>
-                    <Text style={styles.buttonTextModal}>CANCELAR</Text>
-                  </View>
-              </TouchableHighlight>
-              </View>
-
-          </Modal>
-
-          {(servicesSelectedList.length>0) ? (<TouchableHighlight
+          {(servicesSelectedList.length>0) ? (
+            <TouchableHighlight
               style={styles.buttonNext}
               onPress={() => {
-            this.setState({modalVisible:true})
-          }}>
-          <View style={{flexDirection:'row', paddingLeft:180}}>
-            <Text style={styles.buttonTextNext}>SIGUIENTE</Text>
-            <View style={{marginLeft:20, flexDirection:'row'}}>
-            <Image source={require("../images/arrow.png")}/>
-            </View>
-          </View>
-        </TouchableHighlight>): null}
-
-
+              this.setState({modalVisible:true})
+              }}>
+              <View style={{flexDirection:'row', paddingLeft:180}}>
+                <Text style={styles.buttonTextNext}>SIGUIENTE</Text>
+                <View style={{marginLeft:20, flexDirection:'row'}}>
+                  <Image source={require("../images/arrow.png")}/>
+                </View>
+              </View>
+            </TouchableHighlight>): null}
       </View>
-
     );
   }
-
 }
 
-var promos=[
+const promos=[
   {
     urlImage:require("../images/promocion1.png")
   },
@@ -256,7 +284,11 @@ var promos=[
   }
 ]
 
-
+const cars =[
+  {id:1, label:'PICK-UP'},
+  {id:2,label:'AUTO'},
+  {id:3, label:'SUV'}
+]
 const styles = StyleSheet.create({
 
   textTitle:{
@@ -346,6 +378,9 @@ const styles = StyleSheet.create({
     flexDirection:'row',
     borderColor:'#2c67b2',
   },
+  modalSelector:{
+    borderColor: '#2c67b2',
+  }
 })
 
 
