@@ -50,6 +50,7 @@ import firebase  from 'react-native-firebase';
           time:'',
           carsSelected:[],
           service:[],
+          check:false
 
       }
 
@@ -62,14 +63,20 @@ import firebase  from 'react-native-firebase';
   }
 
   writeReserva=()=>{
+    this.state.selectServiceList.map((item)=>{
+        item.check = false
+      this.state.service.push(item.service);
+    })
     this.ref.add({
-      Servicio: this.state.selectServiceList,
+      Servicio: this.state.service,
       Carro: this.state.carsSelected,
       Fecha: this.state.date,
       Hora: this.state.time,
     })
     .then(()=>{
-    this.setState({modalVisible:!this.state.modalVisible});
+
+    this.setState({selectServiceList:[],
+      modalVisible:!this.state.modalVisible});
     console.info("date inserted in firebase");
     })
     .catch(error=>{
@@ -83,6 +90,7 @@ import firebase  from 'react-native-firebase';
      let serviceList = this.state.services;
       serviceList.map((item)=>{
         if(item.service === data.service){
+
           item.check = !item.check
           if(item.check === true){
               let s = item;
@@ -94,6 +102,7 @@ import firebase  from 'react-native-firebase';
             if(1 != -1){
                 this.state.selectServiceList.splice(i,1);
                 console.log('unselect:'+item.service)
+
                 return this.state.selectServiceList
             }
           }
@@ -122,7 +131,7 @@ import firebase  from 'react-native-firebase';
    return this.state.selectServiceList.length;
  }
 
- pressCarSelector=(data)=>{
+ pressCarSelector(data){
 
        this.state.carsSelected.push(data);
        console.log('CAR SELECTED IN STATE');
@@ -244,7 +253,9 @@ import firebase  from 'react-native-firebase';
 
                         <TouchableHighlight
                           onPress={() => {
-                            const empty =[]
+                            this.state.selectServiceList.map((item)=>{
+                                item.check = false
+                            })
                             this.setState({modalVisible:!this.state.modalVisible, selectServiceList:[]});
                             }}>
                               <View style={styles.buttonLogin}>

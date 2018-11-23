@@ -10,10 +10,12 @@ import {Text,
         Button,
         TouchableHighlight,
         Alert,
-        ActivityIndicator
       } from 'react-native';
 import {createStackNavigator} from 'react-navigation';
 import firebase from 'react-native-firebase'
+import {AccessToken,LoginManager,LogginButton} from 'react-native-fbsdk';
+import { GoogleSignin } from 'react-native-google-signin';
+
 
 class SignIn extends Component{
 
@@ -22,14 +24,16 @@ class SignIn extends Component{
     this.state={
       email:'prueba@correo.com',
       password:'prueba',
-      loading:false,
-    }
 
+    }
     this.SignInUser = this.SignInUser.bind(this);
+    this.LoginGoogle=this.LoginGoogle.bind(this);
+    this.LoginFacebook = this.LoginFacebook.bind(this);
+
   }
 
-  SignInUser = () => {
-      this.setState({ loading: true});
+  SignInUser = () =>{
+
       firebase
         .auth()
         .signInWithEmailAndPassword(this.state.email, this.state.password)
@@ -47,11 +51,50 @@ class SignIn extends Component{
         })
     }
 
+    LoginGoogle=()=>{
+
+      GoogleSignin
+              .signIn()
+              .then((data)=>{
+                const credential = firebase.auth.GoogleAuthProvider.credential(data.idToken, data.accessToken);
+                const currentUser = firebase.auth().signInWithCredential(credential);
+                console.info("CurrentUser: "+JSON.stringify(currentUser))
+                return currentUser
+                })
+              .then(()=>this.props.navigation.navigate('SignedIn'))
+              .catch((error)=>{
+                  console.log(error);
+              });
+    }
+
+    LoginFacebook=()=>{
+      LoginManager
+                .logInWithReadPermissions(['public_profile', 'email'])
+                .then((result) => {
+                    if (result.isCancelled) {
+                        return Promise.reject(new Error('The user cancelled the request'));
+                    }
+                    console.log(`Login success with permissions: ${result.grantedPermissions.toString()}`);
+                    // get the access token
+                    return AccessToken.getCurrentAccessToken();
+                })
+                .then(data => {
+                    const credential = firebase.auth.FacebookAuthProvider.credential(data.accessToken);
+                    return firebase.auth().signInWithCredential(credential);
+                })
+                .then(()=>this.props.navigation.navigate('SignedIn'))
+                .then((currentUser) => {
+                    console.info(`Facebook Login with user : ${JSON.stringify(currentUser)}`);
+                })
+                .catch((error) => {
+                    console.log(`Facebook login fail with error: ${error}`);
+                });
+    }
 
 
 render(){
   return(
-      this.state.loading ? <ActivityIndicator /> : <KeyboardAvoidingView behavior='padding' style={styles.wrapper}>
+      <KeyboardAvoidingView behavior='padding' style={styles.wrapper}>
 
 
             <View style={styles.image}><Image style={{width:200,height:200}} source={require('CARWASH/images/LOGOCARWASH.jpg')} /></View>
@@ -77,13 +120,13 @@ render(){
                 </View>
               </TouchableHighlight>
 
-              <TouchableHighlight>
+              <TouchableHighlight onPress={this.LoginFacebook}>
                 <View style={styles.buttonFacebook}>
                   <Text style={styles.buttonText}>INICIAR SESION CON FACEBOOK</Text>
                 </View>
               </TouchableHighlight>
 
-              <TouchableHighlight>
+              <TouchableHighlight onPress={this.LoginGoogle}>
                 <View style={styles.buttonGoogle}>
                   <Text style={styles.buttonText}>INICIAR SESION CON GOOGLE</Text>
                 </View>

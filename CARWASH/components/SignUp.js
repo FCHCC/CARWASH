@@ -14,8 +14,9 @@ import {Text,
 import {createStackNavigator} from 'react-navigation';
 import { onSignIn } from "../auth";
 import firebase from 'react-native-firebase'
-import {AccessToken,LoginManager,LogginButton,ActivityIndicator} from 'react-native-fbsdk';
+import {AccessToken,LoginManager,LogginButton} from 'react-native-fbsdk';
 import { GoogleSignin } from 'react-native-google-signin';
+
 
 class SignUp extends Component {
   constructor(props){
@@ -29,8 +30,9 @@ class SignUp extends Component {
     }
 
     this.SignUpUser = this.SignUpUser.bind(this);
+    this.LoginGoogle=this.LoginGoogle.bind(this);
     this.LoginFacebook = this.LoginFacebook.bind(this);
-    this.LoginGoogle = this.LoginGoogle.bind(this);
+
   }
 
 
@@ -53,23 +55,20 @@ componentWillUnmount(){
   }
 }
 
+LoginGoogle=()=>{
 
-
-SignUpUser=()=>{
-
-
-  firebase.auth().createUserWithEmailAndPassword(this.state.email,this.state.password)
-          .then(()=> {
-
-            this.props.navigation.navigate('SignedIn')
+  GoogleSignin
+          .signIn()
+          .then((data)=>{
+            const credential = firebase.auth.GoogleAuthProvider.credential(data.idToken, data.accessToken);
+            const currentUser = firebase.auth().signInWithCredential(credential);
+            console.info("CurrentUser: "+JSON.stringify(currentUser))
+            return currentUser
             })
-          .then((loggedInUser) => {
-                console.info(`Register with user : ${JSON.stringify(loggedInUser)}`);
-              })
-          .catch((error) => {
-                console.log(`Register fail with error: ${error}`);
-              });
-
+          .then(()=>this.props.navigation.navigate('SignedIn'))
+          .catch((error)=>{
+              console.log(error);
+          });
 }
 
 LoginFacebook=()=>{
@@ -94,25 +93,25 @@ LoginFacebook=()=>{
             .catch((error) => {
                 console.log(`Facebook login fail with error: ${error}`);
             });
-
-
-
 }
 
-LoginGoogle=()=>{
 
-  GoogleSignin
-          .signIn()
-          .then((data)=>{
-            const credential = firebase.auth.GoogleAuthProvider.credential(data.idToken, data.accessToken);
-            const currentUser = firebase.auth().signInWithCredential(credential);
-            console.info("CurrentUser: "+JSON.stringify(currentUser))
-            return currentUser
+
+SignUpUser=()=>{
+
+
+  firebase.auth().createUserWithEmailAndPassword(this.state.email,this.state.password)
+          .then(()=> {
+
+            this.props.navigation.navigate('SignedIn')
             })
-          .then(()=>this.props.navigation.navigate('SignedIn'))
-          .catch((error)=>{
-              console.log(error);
-          });
+          .then((loggedInUser) => {
+                console.info(`Register with user : ${JSON.stringify(loggedInUser)}`);
+              })
+          .catch((error) => {
+                console.log(`Register fail with error: ${error}`);
+              });
+
 }
 
 render(){

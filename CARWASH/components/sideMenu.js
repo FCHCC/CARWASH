@@ -12,7 +12,8 @@ class sideMenu extends Component{
 
     this.state={
         user: [],
-        username:'',
+        useremail:'',
+        urlImage:null,
         sessionChecked:false,
 
     }
@@ -29,6 +30,15 @@ class sideMenu extends Component{
       this.setState({
         sessionChecked:true
       });
+    })
+
+    this.state.user.map((item)=>{
+      console.log(item.email);
+      this.setState({
+        useremail:item.email,
+        urlImage:item.photoURL
+      })
+
     })
 
 
@@ -52,18 +62,12 @@ class sideMenu extends Component{
         <View style={styles.containerProfile}>
           <View >
 
-            {this.state.user.map((u,item)=>{
-              console.log(u.email);
-              return(
-              <Text key={item} style={styles.textProfile}>{u.email}</Text>
-            )
-            })
-          }
+          <Text style={styles.textProfile}>{this.state.useremail}</Text>
 
             <Text style={styles.textProfile}>LAVADAS</Text>
           </View>
           <View style={styles.containerImageProfile} >
-            <Image style={{width:100,height:100}} source={require("../images/profile.png")}/>
+            {this.state.urlImage != null ? <Image style={{width:100,height:100}} source={{uri: this.state.urlImage}}/> :<Image style={{width:100,height:100}} source={require("../images/profile.png")}/>}
           </View>
         </View>
 
