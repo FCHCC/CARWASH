@@ -117,15 +117,13 @@ import firebase  from 'react-native-firebase';
   }
 
   componentDidMount(){
-    firebase.auth().onAuthStateChanged(user => {
-       if (user) {
+
     this.setState({
         services:servicios
     });
     console.info("CHECKED USER IN MAINPAGE");
   }
-})
-}
+
 
   showSelectedService() {
    return this.state.selectServiceList.length;
@@ -137,7 +135,6 @@ import firebase  from 'react-native-firebase';
        console.log('CAR SELECTED IN STATE');
 
  }
-
 
 
   render() {

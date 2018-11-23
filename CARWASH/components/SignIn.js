@@ -20,15 +20,26 @@ import { GoogleSignin } from 'react-native-google-signin';
 class SignIn extends Component{
 
   constructor(props){
+
     super(props)
+
     this.state={
-      email:'prueba@correo.com',
-      password:'prueba',
+      email:'',
+      password:'',
+      user:[]
 
     }
     this.SignInUser = this.SignInUser.bind(this);
     this.LoginGoogle=this.LoginGoogle.bind(this);
     this.LoginFacebook = this.LoginFacebook.bind(this);
+
+  }
+
+  componentDidMount(){
+    this.unsubscriber = firebase.auth().onAuthStateChanged((Changeduser) => {
+      console.info(`changed User : ${JSON.stringify(Changeduser)}`);
+     });
+
 
   }
 
@@ -42,10 +53,13 @@ class SignIn extends Component{
               AsyncStorage.setItem('userData', JSON.stringify(userData));
               this.props.navigation.navigate('SignedIn')
         })
-        .catch((error)=>{
+        .then(()=>{
           this.setState({
-                loading: false
-              });
+            email:'',
+            password:''
+          })
+        })
+        .catch((error)=>{
           Alert('ERROR AL INICIAR SESIÓN, INTENTELO NUEVAMENTE'+ error);
           console.log('LOGIN FAILED' + error);
         })
@@ -104,7 +118,7 @@ render(){
               <TextInput style={styles.textInput} placeholder='Correo' value={this.state.email} underlineColorAndroid="transparent"
                         onChangeText={(email) => this.setState({email})}/>
 
-              <TextInput style={styles.textInput} placeholder='Contraseña' value={this.state.password} underlineColorAndroid="transparent"
+              <TextInput secureTextEntry={true} style={styles.textInput} placeholder='Contraseña' value={this.state.password} underlineColorAndroid="transparent"
                           onChangeText={(password)=>this.setState({password})}/>
 
             </View>

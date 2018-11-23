@@ -14,7 +14,7 @@ class sideMenu extends Component{
         user: [],
         useremail:'',
         urlImage:null,
-        sessionChecked:false,
+
 
     }
     this.SignOutUser= this.SignOutUser.bind(this);
@@ -27,9 +27,7 @@ class sideMenu extends Component{
       console.info(`changed User : ${JSON.stringify(user)}`);
       this.state.user.push(user);
       console.info(this.state.user);
-      this.setState({
-        sessionChecked:true
-      });
+
     })
 
     this.state.user.map((item)=>{
@@ -47,6 +45,12 @@ class sideMenu extends Component{
 
   SignOutUser = () => {
     firebase.auth().signOut()
+    .then(()=>{
+      this.setState({
+        useremail:'',
+        urlImage:null
+      })
+    })
     .then(()=>this.props.navigation.navigate('SignIn'))
     .catch(function(error) {
       console.log(error);

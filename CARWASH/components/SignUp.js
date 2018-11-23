@@ -49,11 +49,7 @@ componentDidMount(){
 
 }
 
-componentWillUnmount(){
-  if(this.unsubscriber){
-    this.unsubscriber();
-  }
-}
+
 
 LoginGoogle=()=>{
 
@@ -103,7 +99,7 @@ SignUpUser=()=>{
   firebase.auth().createUserWithEmailAndPassword(this.state.email,this.state.password)
           .then(()=> {
 
-            this.props.navigation.navigate('SignedIn')
+            this.props.navigation.navigate('SignIn')
             })
           .then((loggedInUser) => {
                 console.info(`Register with user : ${JSON.stringify(loggedInUser)}`);
@@ -124,7 +120,7 @@ return(
               <TextInput style={styles.textInput} placeholder='Correo' value={this.state.email} underlineColorAndroid="transparent"
                         onChangeText={email => this.setState({email})}/>
 
-              <TextInput style={styles.textInput} placeholder='Contraseña' value={this.state.password} underlineColorAndroid="transparent"
+              <TextInput secureTextEntry={true} style={styles.textInput} placeholder='Contraseña' value={this.state.password} underlineColorAndroid="transparent"
                           onChangeText={password=>this.setState({password})}/>
 
             </View>
